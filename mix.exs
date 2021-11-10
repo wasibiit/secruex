@@ -5,7 +5,7 @@ defmodule SecureX.MixProject do
     [
       app: :securex,
       version: "0.1.0",
-      elixir: "~> 1.13",
+      elixir: "~> 1.12",
       maintainers: ["Wasi."],
       licenses: ["Apache 2.0"],
       description: "SecureX Implementation.",
@@ -63,8 +63,10 @@ defmodule SecureX.MixProject do
       {:cowboy, "~> 2.9", override: true},
       {:plug_cowboy, "~> 2.5"},
       {:phoenix, "~> 1.6"},
+      {:phoenix_html, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
-      {:gettext, "~> 0.18.2"}
+      {:gettext, "~> 0.18.2"},
+      {:jason, "~> 1.2"}
     ]
   end
   defp aliases do

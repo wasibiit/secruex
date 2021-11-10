@@ -1,18 +1,8 @@
 defmodule SecureX do
-  @moduledoc """
-  Documentation for `SecureX`.
-  """
-
   @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> SecureX.hello()
-      :world
-
+  Outputs `Hello, World!` every time.
   """
-  def hello do
-    :world
+  def say do
+    IO.puts("Hello, World!")
   end
 end
