@@ -14,38 +14,17 @@ if Code.ensure_loaded?(Ecto) do
         ensure_repo(repo, args)
         path = Path.relative_to(migrations_path(repo), Mix.Project.app_path())
         create_directory(path)
+        migrations = [role: "create_table_roles", res: "create_table_resources", permission: "create_table_permission", user_roles: "create_table_user_roles"]
 
-        assigns = [mod: Module.concat([repo, Migrations, camelize("create_table_roles")])]
-        file = Path.join(path, "#{timestamp()}_#{underscore("create_table_roles")}.exs")
-        content = assigns
-                  |> (fn f -> f ++ [check: "role"] end).()
-                  |> migration_template
-                  |> format_string!
-        create_file(file, content)
-
-        assigns = [mod: Module.concat([repo, Migrations, camelize("create_table_resources")])]
-        file = Path.join(path, "#{timestamp()}_#{underscore("create_table_resources")}.exs")
-        content = assigns
-                  |> (fn f -> f ++ [check: "res"] end).()
-                  |> migration_template
-                  |> format_string!
-        create_file(file, content)
-
-        assigns = [mod: Module.concat([repo, Migrations, camelize("create_table_permissions")])]
-        file = Path.join(path, "#{timestamp()}_#{underscore("create_table_permissions")}.exs")
-        content = assigns
-                  |> (fn f -> f ++ [check: "permission"] end).()
-                  |> migration_template
-                  |> format_string!
-        create_file(file, content)
-
-        assigns = [mod: Module.concat([repo, Migrations, camelize("create_table_user_roles")])]
-        file = Path.join(path, "#{timestamp()}_#{underscore("create_table_user_roles")}.exs")
-        content = assigns
-                  |> (fn f -> f ++ [check: "user_roles"] end).()
-                  |> migration_template
-                  |> format_string!
-        create_file(file, content)
+        Enum.each(migrations, fn {key, value} ->
+          content =
+            [mod: Module.concat([repo, Migrations, camelize(value)])]
+            |> (fn f -> f ++ [check: key] end).()
+            |> migration_template
+            |> format_string!
+          Path.join(path, "#{timestamp()}_#{underscore(value)}.exs")
+          |> create_file(content)
+        end)
 
         #      if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
         #        Mix.Task.run("ecto.migrate", [repo])
@@ -68,7 +47,7 @@ if Code.ensure_loaded?(Ecto) do
       defmodule <%= inspect @mod %> do
         use Ecto.Migration
         <%= case @check do %>
-          <% "role" ->  %>
+          <% :role ->  %>
             def change do
               create table(:roles, primary_key: false) do
                 add :role, :string, null: false, primary_key: true, unique: true
@@ -78,7 +57,7 @@ if Code.ensure_loaded?(Ecto) do
               end
               create unique_index(:roles, [:id])
             end
-        <% "res" ->  %>
+        <% :res ->  %>
             def change do
               create table(:resources, primary_key: false) do
                 add :id, :string, primary_key: true
@@ -88,7 +67,7 @@ if Code.ensure_loaded?(Ecto) do
               end
               create unique_index(:resources, [:id])
             end
-        <% "permission" ->  %>
+        <% :permission ->  %>
             def change do
               create table(:permissions) do
                 add :permission, :integer
@@ -100,7 +79,7 @@ if Code.ensure_loaded?(Ecto) do
               create index(:permissions, [:role_id])
               create index(:permissions, [:resource_id])
             end
-        <% "user_roles" ->  %>
+        <% :user_roles ->  %>
             def change do
               create table(:user_roles) do
                 add :role_id, references(:roles, on_delete: :nothing, type: :string)
