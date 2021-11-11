@@ -5,10 +5,10 @@ defmodule SecureX.MixProject do
     [
       app: :securex,
       version: "0.1.0",
-      elixir: "~> 1.12",
-      maintainers: ["Wasi."],
+      elixir: "~> 1.12 ",
+      maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
-      description: "SecureX Implementation.",
+      description: "SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions.",
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -30,17 +30,17 @@ defmodule SecureX.MixProject do
 
   defp description do
     """
-    SecureX Implementation.
+    SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions.
     """
   end
 
   defp package do
     [
       files: ["lib", "mix.exs", "README.md"],
-      maintainers: ["Wasi."],
+      maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
-      description: "SecureX Implementation."
+      description: "SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions."
     ]
   end
 
@@ -60,13 +60,15 @@ defmodule SecureX.MixProject do
     [
       {:ecto_sql, "~> 3.7"},
       {:ecto, "~> 3.7"},
-      {:cowboy, "~> 2.9", override: true},
-      {:plug_cowboy, "~> 2.5"},
-      {:phoenix, "~> 1.6"},
-      {:phoenix_html, "~> 3.1"},
+      {:cowboy, "~> 2.9"},
+      {:plug_cowboy, "~> 2.2"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_html, "~> 2.14.1"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.18.2"},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+      {:dialyxir, "~> 1.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
   defp aliases do
