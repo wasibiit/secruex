@@ -18,8 +18,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Elixir 1.13.0-rc.0-otp-23" jdkType="Elixir SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="ecto_sql" level="project" />
-    <orderEntry type="library" name="ecto" level="project" />
+    <orderEntry type="library" exported="" name="ecto_sql" level="project" />
+    <orderEntry type="library" exported="" name="ecto" level="project" />
     <orderEntry type="library" name="cowboy" level="project" />
     <orderEntry type="library" name="plug_cowboy" level="project" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -37,5 +37,42 @@
     <orderEntry type="library" name="connection" level="project" />
     <orderEntry type="library" name="plug" level="project" />
     <orderEntry type="library" name="phoenix_pubsub" level="project" />
+    <orderEntry type="library" name="myxql" level="project" />
+    <orderEntry type="library" name="tds" level="project" />
+    <orderEntry type="library" name="jason" level="project" />
+    <orderEntry type="library" name="ex_doc" level="project" />
+    <orderEntry type="library" name="benchee" level="project" />
+    <orderEntry type="library" name="benchee_json" level="project" />
+    <orderEntry type="library" name="hackney" level="project" />
+    <orderEntry type="library" name="kadabra" level="project" />
+    <orderEntry type="library" name="x509" level="project" />
+    <orderEntry type="library" name="telemetry_poller" level="project" />
+    <orderEntry type="library" name="telemetry_metrics" level="project" />
+    <orderEntry type="library" name="phoenix_html" level="project" />
+    <orderEntry type="library" name="phx_new" level="project" />
+    <orderEntry type="library" name="websocket_client" level="project" />
+    <orderEntry type="library" name="esbuild" level="project" />
+    <orderEntry type="library" name="ecto_sql" level="project" />
+    <orderEntry type="library" name="ecto" level="project" />
+    <orderEntry type="library" name="cowboy" level="project" />
+    <orderEntry type="library" name="plug_cowboy" level="project" />
+    <orderEntry type="library" name="phoenix" level="project" />
+    <orderEntry type="library" name="phoenix_html" level="project" />
+    <orderEntry type="library" name="postgrex" level="project" />
+    <orderEntry type="library" name="gettext" level="project" />
+    <orderEntry type="library" name="jason" level="project" />
+    <orderEntry type="library" name="dialyxir" level="project" />
+    <orderEntry type="library" name="erlex" level="project" />
+    <orderEntry type="library" name="credo" level="project" />
+    <orderEntry type="library" name="excoveralls" level="project" />
+    <orderEntry type="library" name="earmark_parser" level="project" />
+    <orderEntry type="library" name="makeup_elixir" level="project" />
+    <orderEntry type="library" name="makeup_erlang" level="project" />
+    <orderEntry type="library" name="makeup" level="project" />
+    <orderEntry type="library" name="nimble_parsec" level="project" />
+    <orderEntry type="library" name="unicode_set" level="project" />
+    <orderEntry type="library" name="benchee_markdown" level="project" />
+    <orderEntry type="library" name="assert_value" level="project" />
+    <orderEntry type="library" name="stream_data" level="project" />
   </component>
 </module>

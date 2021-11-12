@@ -1,5 +1,10 @@
 defmodule SecureX.Repo do
-  use Ecto.Repo,
-    otp_app: :securex,
-    adapter: Ecto.Adapters.Postgres
+  @moduledoc false
+
+  # Dynamic Repo Of Current App
+  def repo do
+    :securex
+    |> Application.fetch_env!(SecureX.Repo)
+    |> Keyword.fetch!(:repo)
+  end
 end

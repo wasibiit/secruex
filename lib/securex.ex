@@ -1,8 +1,9 @@
 defmodule SecureX do
+  alias SecureXWeb.{ ResourceController }
   @doc """
-  Outputs `Hello, World!` every time.
+  Welcome.
   """
-  def say do
-    IO.puts("Hello, World!")
+  def add_resource(params) do
+    ResourceController.create(params)
   end
 end

@@ -1,4 +1,6 @@
 defmodule SecureXWeb.ChangesetView do
+  @moduledoc false
+
   use SecureXWeb, :view
 
   @doc """
