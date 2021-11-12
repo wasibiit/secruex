@@ -17,11 +17,12 @@ defmodule SecureX do
   end
   ```
   Now You need to add configuration for `securex` in your `config/config.ex`
+  You need to add Your Repo and User Schema in config.
   ```elixir
   # config/config.exs
 
-  config :securex, repo: MyApp.Repo, ## Your App Repo
-   schema: MyApp.Schema.User  ## User Schema
+  config :securex, repo: MyApp.Repo,
+   schema: MyApp.Schema.User
   ```
   SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
   ```elixir
