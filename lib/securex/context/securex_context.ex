@@ -58,7 +58,7 @@ defmodule SecureX.SecureXContext do
       ** (Ecto.NoResultsError)
 
   """
-  def get(role_id) do
+  def get_roles(role_id) do
     from(r in Role,
       join: p in Permission, on: p.role_id == r.id,
       where: r.id == ^role_id,
@@ -73,7 +73,7 @@ defmodule SecureX.SecureXContext do
     |> Repo.all
   end
 
-  def get_roles_by(role_id) do
+  def get_role_by(role_id) do
     role_id = role_id
               |> String.trim
               |> String.replace(" ", "_" )
@@ -296,11 +296,11 @@ defmodule SecureX.SecureXContext do
   """
 
 
-  def get(role_id) do
+  def get_permissions(role_id) do
     from(ru in Permission, where: ru.role_id == ^role_id)
     |> Repo.all
   end
-  def get(res_id, role_id) do
+  def get_permissions(res_id, role_id) do
     from(ru in Permission,
       where: ru.resource_id == ^res_id,
       where: ru.role_id == ^role_id
