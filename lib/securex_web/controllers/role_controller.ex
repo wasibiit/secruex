@@ -3,8 +3,8 @@ defmodule SecureXWeb.RoleController do
 
   import Macro, only: [camelize: 1]
   use SecureXWeb, :controller
-  alias SecureX.SecureXContext, as: Context
   alias SecureX.Common
+  alias SecureX.SecureXContext, as: Context
 
   @doc """
   Create a Role,
@@ -149,7 +149,7 @@ defmodule SecureXWeb.RoleController do
 
       iex> delete(%{"id" => "admin")
       %Role{
-        id: admin,
+        id: "admin",
         name: "Admin",
         permissions: :successfully_removed_permissions,
         user_roles: :successfully_removed_user_roles
@@ -187,7 +187,7 @@ defmodule SecureXWeb.RoleController do
   end
   defp remove_permissions(_), do: {:ok, :invalid_role_id}
 
-  def remove_user_roles(%{id: role_id}) do
+  defp remove_user_roles(%{id: role_id}) do
     case Context.get_user_roles_by(%{role_id: role_id}) do
       [] -> {:ok, :already_removed}
       user_roles ->
@@ -195,8 +195,9 @@ defmodule SecureXWeb.RoleController do
         {:ok, :successfully_removed_user_roles}
     end
   end
+  defp remove_user_roles(_), do: {:ok, :invalid_role_id}
 
-  def delete_role(role) do
+  defp delete_role(role) do
     case Context.delete_role(role) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
