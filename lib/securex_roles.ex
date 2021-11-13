@@ -58,4 +58,25 @@ defmodule SecureX.Roles do
       {:ok, role} -> {:ok, role}
     end
   end
+
+  @doc """
+  Delete a Role. All `Permissions` and `UserRoles` will be removed against this role.
+
+  ## Examples
+
+      iex> delete(%{"id" => "admin")
+      %Role{
+        id: admin,
+        name: "Admin",
+        permissions: :successfully_removed_permissions,
+        user_roles: :successfully_removed_user_roles
+      }
+  """
+  @spec delete_role(map()) :: struct()
+  def delete_role(params) do
+    case RoleController.delete(params) do
+      {:error, error} -> {:error, error}
+      {:ok, role} -> {:ok, role}
+    end
+  end
 end

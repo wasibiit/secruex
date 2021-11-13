@@ -59,7 +59,7 @@ defmodule SecureXWeb.RoleController do
               end)
             }
         end
-      permissions -> {:ok, :permissions_already_set}
+      _-> {:ok, :permissions_already_set}
     end
   end
 
@@ -98,7 +98,7 @@ defmodule SecureXWeb.RoleController do
     end
   end
 
-  defp update_role(prev_role, %{role: new_role} = params) do
+  defp update_role(prev_role, %{role: new_role}) do
     name = new_role |> String.trim
     updated_role = name
            |> String.downcase
@@ -135,10 +135,71 @@ defmodule SecureXWeb.RoleController do
   end
   defp update_permissions(role, _), do: {:ok, role}
 
-  defp update_permission(resource_id, permission, role_id) do
+  defp update_permission(resource_id, updated_permission, role_id) do
     case Context.get_permissions(resource_id, role_id) do
       nil -> :nothing
-      permission -> Context.update_permission(permission, %{permission: permission, role_id: role_id})
+      permission -> Context.update_permission(permission, %{permission: updated_permission, role_id: role_id})
+    end
+  end
+
+  @doc """
+  Delete Role,
+
+  ## Examples
+
+      iex> delete(%{"id" => "admin")
+      %Role{
+        id: admin,
+        name: "Admin",
+        permissions: :successfully_removed_permissions,
+        user_roles: :successfully_removed_user_roles
+      }
+  """
+  @spec delete(map()) :: struct()
+  def delete(params) when params !== %{} do
+    case params do
+      %{id: role_id} -> delete_role_sage(role_id)
+      %{"id" => role_id} -> delete_role_sage(role_id)
+      _-> {:error, :bad_input}
+    end
+  end
+  def delete(_), do: {:error, :bad_input}
+
+  defp delete_role_sage(role_id) do
+    with %{__struct__: _} = role <- Context.get_role_by(role_id),
+         {:ok, permission} <- remove_permissions(role),
+         {:ok, user_role} <- remove_user_roles(role),
+         {:ok, role} <- delete_role(role) do
+      {:ok, Map.merge(role, %{permissions: permission, user_roles: user_role})}
+    else
+      nil -> {:error, :doesnt_exist}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  defp remove_permissions(%{id: role_id}) do
+    case Context.get_permissions(role_id) do
+      [] -> {:ok, :already_removed}
+      permissions ->
+        Enum.map(permissions, fn per -> Context.delete_permission(per) end)
+        {:ok, :successfully_removed_permissions}
+    end
+  end
+  defp remove_permissions(_), do: {:ok, :invalid_role_id}
+
+  def remove_user_roles(%{id: role_id}) do
+    case Context.get_user_roles_by(%{role_id: role_id}) do
+      [] -> {:ok, :already_removed}
+      user_roles ->
+        Enum.map(user_roles, fn user_role -> Context.delete_user_role(user_role) end)
+        {:ok, :successfully_removed_user_roles}
+    end
+  end
+
+  def delete_role(role) do
+    case Context.delete_role(role) do
+      {:error, error} -> {:error, error}
+      {:ok, role} -> {:ok, role}
     end
   end
 end
