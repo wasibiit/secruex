@@ -52,7 +52,6 @@ defmodule SecureXWeb do
 
       import SecureXWeb.ErrorHelpers
       import SecureXWeb.Gettext
-      alias SecureXWeb.Router.Helpers, as: Routes
     end
   end
 

@@ -260,8 +260,8 @@ defmodule SecureX.SecureXContext do
       where: ru.role_id in ^roles,
       select: %{
         permission: ru.permission,
-        resource: ru.resource_id,
-        role: ru.role_id
+        resource_id: ru.resource_id,
+        role_id: ru.role_id
       }
     ) |> Repo.all
   end
@@ -313,8 +313,8 @@ defmodule SecureX.SecureXContext do
       where: ru.role_id in ^roles,
       select: %{
         permission: ru.permission,
-        resource: ru.resource_id,
-        role: ru.role_id
+        resource_id: ru.resource_id,
+        role_id: ru.role_id
       }
     ) |> Repo.all
   end
@@ -326,8 +326,8 @@ defmodule SecureX.SecureXContext do
       limit: 1,
       select: %{
         permission: ru.permission,
-        resource: ru.resource_id,
-        role: ru.role_id
+        resource_id: ru.resource_id,
+        role_id: ru.role_id
       }
     ) |> Repo.one
   end
