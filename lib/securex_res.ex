@@ -6,18 +6,18 @@ defmodule SecureX.Res do
   """
 
   @doc """
-  Create a Resource. You can send either `Atom Map` or `String Map` to add Resource.
+  Add a Resource. You can send either `Atom Map` or `String Map` to add Resource.
 
   ## Examples
 
-      iex> create(%{"res" => "Person Farm"})
+      iex> add(%{"res" => "Person Farm"})
       %Resource{
         id: "person_farm",
         name: "Persons Farm"
       }
   """
-  @spec add_res(map()) :: struct()
-  def add_res(params) do
+  @spec add(map()) :: struct()
+  def add(params) do
     case ResourceController.create(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
@@ -39,8 +39,8 @@ defmodule SecureX.Res do
       }
 
   """
-  @spec update_res(map()) :: struct()
-  def update_res(params) do
+  @spec update(map()) :: struct()
+  def update(params) do
     case ResourceController.update(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
@@ -59,8 +59,8 @@ defmodule SecureX.Res do
         permissions: :successfully_removed_permissions
       }
   """
-  @spec delete_res(map()) :: struct()
-  def delete_res(params) do
+  @spec delete(map()) :: struct()
+  def delete(params) do
     case ResourceController.delete(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}

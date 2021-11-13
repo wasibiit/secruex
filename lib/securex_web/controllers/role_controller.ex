@@ -129,6 +129,7 @@ defmodule SecureXWeb.RoleController do
             update_permission(resource_id, permission, role.id)
           %{resource_id: resource_id, permission: permission} ->
             update_permission(resource_id, permission, role.id)
+            _-> :bad_input
         end
       end)
     {:ok, Map.merge(role, %{permissions: permissions})}
@@ -136,7 +137,7 @@ defmodule SecureXWeb.RoleController do
   defp update_permissions(role, _), do: {:ok, role}
 
   defp update_permission(resource_id, updated_permission, role_id) do
-    case Context.get_permissions(resource_id, role_id) do
+    case Context.get_permission(resource_id, role_id) do
       nil -> :nothing
       permission -> Context.update_permission(permission, %{permission: updated_permission, role_id: role_id})
     end

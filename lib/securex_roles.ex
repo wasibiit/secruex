@@ -6,12 +6,12 @@ defmodule SecureX.Roles do
   """
 
   @doc """
-  Create a Role. You can send either `Atom Map` or `String Map` to add Role. If you have existing resources,
+  Add a Role. You can send either `Atom Map` or `String Map` to add Role. If you have existing resources,
   it will create default permissions against this role
 
   ## Examples
 
-      iex> add_role(%{"role" => "Super Admin"})
+      iex> add(%{"role" => "Super Admin"})
       %Role{
         id: "super_admin",
         name: "Super Admin",
@@ -25,8 +25,8 @@ defmodule SecureX.Roles do
   Your will get Role `struct()` with all permissions created for the resources if they exist.
   `list()`of permissions you will get in simple `map()`.
   """
-  @spec add_role(map()) :: struct()
-  def add_role(params) do
+  @spec add(map()) :: struct()
+  def add(params) do
     case RoleController.create(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
@@ -51,8 +51,8 @@ defmodule SecureX.Roles do
 
   It will return with permissions that you sent in params to change.
   """
-  @spec update_role(map()) :: struct()
-  def update_role(params) do
+  @spec update(map()) :: struct()
+  def update(params) do
     case RoleController.update(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
@@ -72,8 +72,8 @@ defmodule SecureX.Roles do
         user_roles: :successfully_removed_user_roles
       }
   """
-  @spec delete_role(map()) :: struct()
-  def delete_role(params) do
+  @spec delete(map()) :: struct()
+  def delete(params) do
     case RoleController.delete(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}

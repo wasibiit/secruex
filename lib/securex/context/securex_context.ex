@@ -264,26 +264,26 @@ defmodule SecureX.SecureXContext do
 
   """
   def list_permissions(roles) do
-    from(ru in Permission,
-      join: r in Resource, on: ru.resource_id == r.id,
-      where: ru.role_id in ^roles,
+    from(p in Permission,
+      join: r in Resource, on: p.resource_id == r.id,
+      where: p.role_id in ^roles,
       select: %{
-        permission: ru.permission,
-        resource_id: ru.resource_id,
-        role_id: ru.role_id
+        permission: p.permission,
+        resource_id: p.resource_id,
+        role_id: p.role_id
       }
     ) |> Repo.repo().all
   end
 
   #  def list_permissions_by(role_ids) do
-  #    from(ru in Permission,
-  #      join: r in Resource, on: ru.resource_id == r.id,
-  #      join: u in User, on: ru.user_id == ^user_id,
-  #      distinct: ru.id,
+  #    from(p in Permission,
+  #      join: r in Resource, on: p.resource_id == r.id,
+  #      join: u in User, on: p.user_id == ^user_id,
+  #      distinct: p.id,
   #      select: %{
-  #        id: ru.id,
+  #        id: p.id,
   #        resource: r.res,
-  #        permission: ru.permission
+  #        permission: p.permission
   #      }
   #    )
   #    |> Repo.repo().all
@@ -304,51 +304,54 @@ defmodule SecureX.SecureXContext do
 
   """
 
+  def get_permission(res_id, role_id) do
+    from(p in Permission, where: p.resource_id == ^res_id and p.role_id == ^role_id)
+    |> Repo.repo().one
+  end
+
+  def get_permission(per_id) do
+    from(p in Permission, where: p.id == ^per_id)
+    |> Repo.repo().one
+  end
 
   def get_permissions(role_id) do
-    from(ru in Permission, where: ru.role_id == ^role_id)
+    from(p in Permission, where: p.role_id == ^role_id)
     |> Repo.repo().all
   end
-  def get_permissions(res_id, role_id) do
-    from(ru in Permission,
-      where: ru.resource_id == ^res_id,
-      where: ru.role_id == ^role_id
-    ) |> Repo.repo().one
-  end
 
-  def get_permission_by_res_id(res_id) do
-    from(ru in Permission,
-      join: r in Resource, on: ru.resource_id == r.id,
-      where: ru.resource_id == ^res_id,
+  def get_permissions_by_res_id(res_id) do
+    from(p in Permission,
+      join: r in Resource, on: p.resource_id == r.id,
+      where: p.resource_id == ^res_id,
       select: %{
-        permission: ru.permission,
-        resource_id: ru.resource_id,
-        role_id: ru.role_id
+        permission: p.permission,
+        resource_id: p.resource_id,
+        role_id: p.role_id
       }
     ) |> Repo.repo().all
   end
 
   def get_permission_by(roles) do
-    from(ru in Permission,
-      join: r in Resource, on: ru.resource_id == r.id,
-      where: ru.role_id in ^roles,
+    from(p in Permission,
+      join: r in Resource, on: p.resource_id == r.id,
+      where: p.role_id in ^roles,
       select: %{
-        permission: ru.permission,
-        resource_id: ru.resource_id,
-        role_id: ru.role_id
+        permission: p.permission,
+        resource_id: p.resource_id,
+        role_id: p.role_id
       }
     ) |> Repo.repo().all
   end
   def get_permission_by(res_id, roles) do
-    from(ru in Permission,
-      where: ru.resource_id == ^res_id,
-      where: ru.role_id in ^roles,
-      order_by: [desc: ru.permission],
+    from(p in Permission,
+      where: p.resource_id == ^res_id,
+      where: p.role_id in ^roles,
+      order_by: [desc: p.permission],
       limit: 1,
       select: %{
-        permission: ru.permission,
-        resource_id: ru.resource_id,
-        role_id: ru.role_id
+        permission: p.permission,
+        resource_id: p.resource_id,
+        role_id: p.role_id
       }
     ) |> Repo.repo().one
   end

@@ -83,7 +83,7 @@ defmodule SecureXWeb.ResourceController do
                    |> String.replace(" ", "_")
     if(prev_res.id !== updated_res) do
       {:ok, new_res} = Context.create_resource(%{id: updated_res, name: camelize(name)})
-      case Context.get_permission_by_res_id(prev_res.id) do
+      case Context.get_permissions_by_res_id(prev_res.id) do
         [] -> :nothing
         permissions -> Enum.map(permissions, fn per -> Context.update_permission(per, %{resource_id: updated_res}) end)
       end
@@ -128,7 +128,7 @@ defmodule SecureXWeb.ResourceController do
   end
 
   defp remove_permissions(%{id: res_id}) do
-    case Context.get_permission_by_res_id(res_id) do
+    case Context.get_permissions_by_res_id(res_id) do
       [] -> {:ok, :already_removed}
       permissions ->
         Enum.map(permissions, fn per -> Context.delete_permission(per) end)

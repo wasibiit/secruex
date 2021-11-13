@@ -76,8 +76,7 @@ if Code.ensure_loaded?(Ecto) do
 
                 timestamps()
               end
-              create index(:permissions, [:role_id])
-              create index(:permissions, [:resource_id])
+              create unique_index(:permissions, [:role_id, :resource_id])
             end
         <% :user_roles ->  %>
             def change do
