@@ -102,6 +102,11 @@ defmodule SecureX do
   defp check_permissions(_, _), do: {:error, ["Invalid Request"]}
   end
   ```
+  You are all set.
+  Please let us know about and open issue on https://github.com/DevWasi/secruex/issues.
+  Looking Forward to it.
+
+  Happy Coding !!!!!
   """
 
   @doc """

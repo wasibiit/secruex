@@ -1,5 +1,11 @@
 # SecureX
 
+SecureX is an Elixir Library to handle your RBAC (Role Based Access Control).
+
+It has 4 basic modules, `SecureX.Roles`, `SecureX.Res`, `SecureX.Permissions` and `SecureX.UserRoles`.
+All Modules have CRUD to maintain your RBAC.
+`SecureX` Module has validation for user.
+
 ## Installation
 
 If installing from Hex, use the latest version from there:
@@ -17,7 +23,7 @@ You need to add Your Repo and User Schema in config.
   ```elixir
   # config/config.exs
 
-  config :securex, repo: MyApp.Repo, 
+  config :securex, repo: MyApp.Repo,
    schema: MyApp.Schema.User
   ```
 SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
@@ -29,10 +35,73 @@ SecureX comes with built-in support for apps. Just create migrations with `mix s
   * creating priv/repo/migrations/20211112222439_create_table_permissions.exs
   * creating priv/repo/migrations/20211112222439_create_table_user_roles.exs
   ```
-
-The Migrations now added to your project. It will ask you if you want to migrate it as well.
-Do you want to run this migration? `y/n`, Press `y` if you want to Migrate.
+The Migrations added to your project.
   ```elixir
-  iex> "Do you want to run this migration?" #y
+  iex> "Do you want to run this migration?"
   iex> mix ecto.migrate
   ```
+You are Now Up and Running!!!
+
+## Guide
+
+You can also use SecureX as a Middleware.
+
+Valid inputs for permissions are "POST","GET","PUT" ,"DELETE","read","write","delete","edit" as well.
+Permissions have downward flow. i.e if you have defined permissions for a higher operation,
+It automatically assigns them permissions for lower operations.
+like "edit" grants permissions for all operations. their hierarchy is in this order.
+
+  ```
+    "read" < "write" < "delete" < "edit"
+    "GET" < "POST" < "DELETE" < "PUT"
+    1 < 2 < 3 < 4
+  ```
+
+## Middlewares
+In RestApi or GraphiQL all you have to do, add a `Plug`.
+
+## Examples
+  ```elixir
+   #lib/plugs/securex_plug.ex
+
+    defmodule MyApp.Plugs.SecureXPlug do
+      @behaviour Plug
+
+      import Plug.Conn
+
+      def init(default), do: default
+
+      def call(conn, _) do
+        with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
+            {:ok, claims} <- MyApp.Auth.Guardian.decode_and_verify(token),
+            {:ok, user} <- MyApp.Auth.Guardian.resource_from_claims(claims),
+            {:ok, %Plug.Conn{}} <- check_permissions(conn, user) do
+      conn
+    else
+      {:error, error} ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(403, Jason.encode!(%{errors: error}))
+        |> Plug.Conn.halt()
+      _ ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(403, Jason.encode!(%{errors: ["Permission Denied"]}))
+        |> Plug.Conn.halt()
+    end
+  end
+
+  defp check_permissions(%{body_params: %{"resource" => res, "permission" => permission}} = conn, %{id: user_id}) do
+    case SecureX.has_access?(user_id, res, permission) do
+        false -> {:error, false}
+        true -> {:ok, conn}
+      end
+  end
+  defp check_permissions(_, _), do: {:error, ["Invalid Request"]}
+  end
+  ```
+You are all set. 
+Please let us know about and open issue on https://github.com/DevWasi/secruex/issues.
+Looking Forward to it. 
+
+Happy Coding !!!!!
