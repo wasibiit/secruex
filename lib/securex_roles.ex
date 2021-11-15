@@ -6,6 +6,60 @@ defmodule SecureX.Roles do
   """
 
   @doc """
+  Get list of Roles with Permissions.
+
+  ## Examples
+
+      iex> list()
+      [
+      %Role{
+        id: "super_admin",
+        name: "Super Admin",
+        permission: [
+          ...
+          %{resource_id: "users", permission: -1, role_id: "super_admin"},
+          %{resource_id: "employees", permission: -1, role_id: "super_admin"},
+          %{resource_id: "customer", permission: -1, role_id: "super_admin"}
+          ...
+        ]
+      }
+    ]
+  """
+  @spec list() :: nonempty_list()
+  def list(params) do
+    case RoleController.list_roles(params) do
+      [] -> {:error, :no_roles_found}
+      roles -> {:ok, roles}
+    end
+  end
+
+  @doc """
+  Get a Role.
+
+  ## Examples
+
+      iex> get(%{"role" => "super_admin"})
+      %Role{
+        id: "super_admin",
+        name: "Super Admin",
+        permission: [
+          ...
+          %{resource_id: "users", permission: -1, role_id: "super_admin"},
+          %{resource_id: "employees", permission: -1, role_id: "super_admin"},
+          %{resource_id: "customer", permission: -1, role_id: "super_admin"}
+          ...
+        ]
+      }
+  """
+  @spec get(map()) :: struct()
+  def get(params) do
+    case RoleController.get(params) do
+      {:error, error} -> {:error, error}
+      {:ok, role} -> {:ok, role}
+    end
+  end
+
+  @doc """
   Add a Role. You can send either `Atom Map` or `String Map` to add Role. If you have existing resources,
   it will create default permissions against this role
 

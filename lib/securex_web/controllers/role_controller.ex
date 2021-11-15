@@ -7,6 +7,66 @@ defmodule SecureXWeb.RoleController do
   alias SecureX.SecureXContext, as: Context
 
   @doc """
+  Get list of roles with permissions,
+
+  ## Examples
+
+      iex> list_roles()
+      [
+      %Role{
+        id: "super_admin",
+        name: "Super Admin",
+        permission: [
+          ...
+          %{resource_id: "users", permission: -1, role_id: "super_admin"},
+          %{resource_id: "employees", permission: -1, role_id: "super_admin"},
+          %{resource_id: "customer", permission: -1, role_id: "super_admin"}
+          ...
+        ]
+      }
+    ]
+  """
+  @spec list_roles() :: nonempty_list()
+  def list_roles() do
+    Context.list_roles_by()
+  end
+
+  @doc """
+  Get a Role,
+
+  ## Examples
+
+      iex> get(%{"role" => "super_admin"})
+      %Role{
+        id: "super_admin",
+        name: "Super Admin",
+        permission: [
+          ...
+          %{resource_id: "users", permission: -1, role_id: "super_admin"},
+          %{resource_id: "employees", permission: -1, role_id: "super_admin"},
+          %{resource_id: "customer", permission: -1, role_id: "super_admin"}
+          ...
+        ]
+      }
+  """
+  @spec get(map()) :: struct()
+  def get(params) when params !== %{} do
+    case params do
+      %{role: role} -> get_role_sage(role)
+      %{"role" => role} -> get_role_sage(role)
+      _-> {:error, :bad_input}
+    end
+  end
+  def get(_), do: {:error, :bad_input}
+
+  defp get_role_sage(params) do
+    case Context.get_role(params) do
+      nil -> {:error, :no_role_found}
+      role -> {:ok, role}
+    end
+  end
+
+  @doc """
   Create a Role,
 
   ## Examples

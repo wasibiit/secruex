@@ -30,11 +30,9 @@ defmodule SecureX.SecureXContext do
     ) |> Repo.repo().all
   end
 
-  def list_roles_by(offset, limit \\ 10) do
+  def list_roles_by() do
     from(r in Role,
       join: p in Permission, on: p.role_id == r.id,
-      offset: ^offset,
-      limit: ^limit,
       order_by: [asc: r.id],
       select: %{
         permission: p.permission,
@@ -58,11 +56,10 @@ defmodule SecureX.SecureXContext do
       ** (Ecto.NoResultsError)
 
   """
-  def get_roles(role_id) do
+  def get_role(role_id) do
     from(r in Role,
       join: p in Permission, on: p.role_id == r.id,
       where: r.id == ^role_id,
-      order_by: [asc: p.resource_id],
       select: %{
         id: r.id,
         name: r.name,
@@ -70,7 +67,7 @@ defmodule SecureX.SecureXContext do
         resource: p.resource_id
       }
     )
-    |> Repo.repo().all
+    |> Repo.repo().one
   end
 
   def get_role_by(role_id) do
@@ -448,6 +445,16 @@ defmodule SecureX.SecureXContext do
       ** (Ecto.NoResultsError)
 
   """
+  def get_user_role(user_role_id) do
+    from(ur in UserRole, where: ur.id == ^user_role_id)
+    |> Repo.repo().one
+  end
+
+  def get_user_role_by(user_id, role_id) do
+    from(ur in UserRole, where: ur.role_id == ^role_id and ur.user_id == ^user_id)
+    |> Repo.repo().one
+  end
+
   def get_user_roles_by(%{role_id: role_id}) do
     from(ur in UserRole,
       where: ur.role_id == ^role_id,

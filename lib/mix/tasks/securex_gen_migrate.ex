@@ -1,6 +1,6 @@
 if Code.ensure_loaded?(Ecto) do
   defmodule Mix.Tasks.SecureX.Gen.Migrate do
-    @moduledoc "The SecureX mix task: `mix help secure_x.gen.migrate`"
+    @moduledoc "The SecureX mix task to create migrations into your project `priv/repo/migrations` folder"
     use Mix.Task
 
     import Macro, only: [camelize: 1, underscore: 1]
