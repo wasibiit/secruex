@@ -2,7 +2,7 @@ defmodule SecureX.Roles do
   alias SecureXWeb.{ RoleController }
 
   @moduledoc """
-
+  Contains CRUD For Roles.
   """
 
   @doc """

@@ -2,7 +2,7 @@ defmodule SecureX.Permissions do
   alias SecureXWeb.{ PermissionController }
 
   @moduledoc """
-
+  Contains CRUD For Permissions.
   """
 
   @doc """

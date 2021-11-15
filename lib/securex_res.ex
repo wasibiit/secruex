@@ -2,7 +2,7 @@ defmodule SecureX.Res do
   alias SecureXWeb.{ ResourceController }
 
   @moduledoc """
-
+  Contains CRUD For Resources.
   """
 
   @doc """
