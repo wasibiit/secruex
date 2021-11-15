@@ -37,13 +37,10 @@ defmodule SecureX do
   * creating priv/repo/migrations/20211112222439_create_table_permissions.exs
   * creating priv/repo/migrations/20211112222439_create_table_user_roles.exs
   ```
-
-  The Migrations now added to your project. It will ask you if you want to migrate it as well.
-  Do you want to run this migration? `y/n`, Press `y` if you want to Migrate.
+  The Migrations added to your project.
   ```elixir
-  iex> "Do you want to run this migration?" #y
+  iex> "Do you want to run this migration?"
   iex> mix ecto.migrate
   ```
-
   """
 end

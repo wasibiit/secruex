@@ -6,6 +6,26 @@ defmodule SecureXWeb.PermissionController do
   alias SecureX.SecureXContext, as: Context
 
   @doc """
+  Get list of Permissions By Roles,
+
+  ## Examples
+
+      iex> list_permissions(["owner", "super_admin"])
+      [
+      ...
+      %{ permission: 4, resource_id: "users", role_id: "admin"},
+      ...
+      %{ permission: 4, resource_id: "person_form", role_id: "super_admin"},
+      ...
+    ]
+  """
+  @spec list_permissions(list()) :: nonempty_list()
+  def list_permissions(params) when params !== [] do
+    Context.list_permissions(params)
+  end
+  def list_permissions(_), do: {:error, :bad_input}
+
+  @doc """
   Create a Permission,
 
   ## Examples

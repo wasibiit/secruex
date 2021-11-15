@@ -6,7 +6,33 @@ defmodule SecureXWeb.UserRoleController do
   alias SecureX.SecureXContext, as: Context
 
   @doc """
-  Create an User Role,
+  Get list of UserRoles by `user_id`,
+
+  ## Examples
+
+      iex> get(%{"user_id" => 1})
+      ["owner", "admin", ...]
+
+  """
+  @spec get(map()) :: struct()
+  def get(params) when params !== %{} do
+    case params do
+      %{user_id: user_id} -> get_user_role_sage(user_id)
+      %{"user_id" => user_id} -> get_user_role_sage(user_id)
+      _-> {:error, :bad_input}
+    end
+  end
+  def get(_), do: {:error, :bad_input}
+
+  defp get_user_role_sage(params) do
+    case Context.get_user_roles_by_user_id(params) do
+      nil -> {:error, :no_user_roles_found}
+      roles -> {:ok, roles}
+    end
+  end
+
+  @doc """
+  Create an UserRole,
 
   ## Examples
 

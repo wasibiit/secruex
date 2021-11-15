@@ -26,8 +26,8 @@ defmodule SecureX.Roles do
     ]
   """
   @spec list() :: nonempty_list()
-  def list(params) do
-    case RoleController.list_roles(params) do
+  def list() do
+    case RoleController.list_roles() do
       [] -> {:error, :no_roles_found}
       roles -> {:ok, roles}
     end

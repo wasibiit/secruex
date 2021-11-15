@@ -6,6 +6,28 @@ defmodule SecureX.Permissions do
   """
 
   @doc """
+  Get list of Permissions by User Roles
+
+  ## Examples
+
+      iex> list(["owner", "super_admin"])
+      [
+      ...
+      %{ permission: 4, resource_id: "users", role_id: "admin"},
+      ...
+      %{ permission: 4, resource_id: "person_form", role_id: "super_admin"},
+      ...
+    ]9
+  """
+  @spec list(list()) :: nonempty_list()
+  def list(params) do
+    case PermissionController.list_permissions(params) do
+      [] -> {:error, :no_permissions_found}
+      per -> {:ok, per}
+    end
+  end
+
+  @doc """
   Add a Permission. You can send either `Atom Map` or `String Map` to add Permission.
 
   ## Examples

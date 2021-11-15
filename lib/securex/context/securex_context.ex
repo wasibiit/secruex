@@ -262,7 +262,6 @@ defmodule SecureX.SecureXContext do
   """
   def list_permissions(roles) do
     from(p in Permission,
-      join: r in Resource, on: p.resource_id == r.id,
       where: p.role_id in ^roles,
       select: %{
         permission: p.permission,
@@ -461,7 +460,7 @@ defmodule SecureX.SecureXContext do
     )
     |> Repo.repo().all
   end
-  def get_user_roles_by(user_id) do
+  def get_user_roles_by_user_id(user_id) do
     from(ur in UserRole,
       where: ur.user_id == ^user_id,
       select: ur.role_id

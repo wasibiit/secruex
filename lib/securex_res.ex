@@ -6,6 +6,51 @@ defmodule SecureX.Res do
   """
 
   @doc """
+  Get list of Resources.
+
+  ## Examples
+
+      iex> list()
+      [
+      %Resource{
+        id: "person_farm",
+        name: "Persons Farm"
+      },
+      %Resource{
+        id: "users",
+        name: "Users"
+      },
+      ...
+    ]
+  """
+  @spec list() :: nonempty_list()
+  def list(params) do
+    case ResourceController.list_resources() do
+      [] -> {:error, :no_resources_found}
+      res -> {:ok, res}
+    end
+  end
+
+  @doc """
+  Get a Resource,
+
+  ## Examples
+
+      iex> get(%{"res" => "person_farm"})
+      %Resource{
+        id: "person_farm",
+        name: "Persons Farm"
+      }
+  """
+  @spec get(map()) :: struct()
+  def get(params) do
+    case ResourceController.get(params) do
+      {:error, error} -> {:error, error}
+      {:ok, res} -> {:ok, res}
+    end
+  end
+
+  @doc """
   Add a Resource. You can send either `Atom Map` or `String Map` to add Resource.
 
   ## Examples
