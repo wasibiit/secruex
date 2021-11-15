@@ -26,9 +26,9 @@ if Code.ensure_loaded?(Ecto) do
           |> create_file(content)
         end)
 
-        #      if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
-        #        Mix.Task.run("ecto.migrate", [repo])
-        #      end
+        if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
+          Mix.Task.run("ecto.migrate", [repo])
+        end
       end
       )
     end

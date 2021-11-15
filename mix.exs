@@ -4,7 +4,7 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "0.2.0",
+      version: "0.3.0",
       elixir: "~> 1.12 ",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
