@@ -7,6 +7,57 @@ defmodule SecureXWeb.ResourceController do
   alias SecureX.SecureXContext, as: Context
 
   @doc """
+  Get list of Resources,
+
+  ## Examples
+
+      iex> list_resources()
+      [
+      %Resource{
+        id: "person_farm",
+        name: "Persons Farm"
+      },
+      %Resource{
+        id: "users",
+        name: "Users"
+      },
+      ...
+    ]
+  """
+  @spec list_resources() :: nonempty_list()
+  def list_resources() do
+    Context.list_resources()
+  end
+
+  @doc """
+  Get a Resource,
+
+  ## Examples
+
+      iex> get(%{"res" => "person_farm"})
+      %Resource{
+        id: "person_farm",
+        name: "Persons Farm"
+      }
+  """
+  @spec get(map()) :: struct()
+  def get(params) when params !== %{} do
+    case params do
+      %{res: res_id} -> get_resource_sage(res_id)
+      %{"res" => res_id} -> get_resource_sage(res_id)
+      _-> {:error, :bad_input}
+    end
+  end
+  def get(_), do: {:error, :bad_input}
+
+  defp get_resource_sage(params) do
+    case Context.get_resource(params) do
+      nil -> {:error, :no_role_found}
+      res -> {:ok, res}
+    end
+  end
+
+  @doc """
   Create a resource,
 
   ##example
@@ -48,7 +99,7 @@ defmodule SecureXWeb.ResourceController do
   Update a resource,
 
   ##example
-      iex> update(%{"id" => "person_farm", name: "Person Organization"})
+      iex> update(%{"res" => "person_farm", name: "Person Organization"})
       %Resource{
         id: "person_organization",
         name: "Person Organization"
@@ -57,8 +108,8 @@ defmodule SecureXWeb.ResourceController do
   @spec update(map()) :: struct()
   def update(params) when params !== %{} do
     case params do
-      %{id: res_id} -> update_res_sage(res_id, params)
-      %{"id" => res_id} ->
+      %{res: res_id} -> update_res_sage(res_id, params)
+      %{"res" => res_id} ->
         params = Common.keys_to_atoms(params)
         update_res_sage(res_id, params)
       _-> {:error, :bad_input}
@@ -99,7 +150,7 @@ defmodule SecureXWeb.ResourceController do
 
   ## Examples
 
-      iex> delete(%{"id" => "person_organization")
+      iex> delete(%{"res" => "person_organization")
       %Resource{
         id: "person_organization",
         name: "Person Organization",
@@ -109,8 +160,8 @@ defmodule SecureXWeb.ResourceController do
   @spec delete(map()) :: struct()
   def delete(params) when params !== %{} do
     case params do
-      %{id: res_id} -> delete_res_sage(res_id)
-      %{"id" => res_id} -> delete_res_sage(res_id)
+      %{res: res_id} -> delete_res_sage(res_id)
+      %{"res" => res_id} -> delete_res_sage(res_id)
       _-> {:error, :bad_input}
     end
   end
