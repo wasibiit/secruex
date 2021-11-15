@@ -3,16 +3,6 @@ defmodule SecureXWeb.Endpoint do
 
   use Phoenix.Endpoint, otp_app: :securex
 
-  socket "/socket", SecureXWeb.UserSocket
-
-  # Serve at "/" the static files from "priv/static" directory.
-  #
-  # You should set gzip to true if you are running phoenix.digest
-  # when deploying your static files in production.
-  plug Plug.Static,
-    at: "/", from: :securex, gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
-
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   
@@ -34,8 +24,6 @@ defmodule SecureXWeb.Endpoint do
     store: :cookie,
     key: "_securex_key",
     signing_salt: "Me/sE7Ue"
-
-  plug SecureXWeb.Router
 
   @doc """
   Callback invoked for dynamically configuring the endpoint.

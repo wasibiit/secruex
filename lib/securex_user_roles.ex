@@ -44,7 +44,7 @@ defmodule SecureX.UserRoles do
   """
   @spec add(map()) :: struct()
   def add(params) do
-    case PermissionController.create(params) do
+    case UserRoleController.create(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
     end
@@ -64,7 +64,7 @@ defmodule SecureX.UserRoles do
   """
   @spec delete(map()) :: struct()
   def delete(params) do
-    case PermissionController.delete(params) do
+    case UserRoleController.delete(params) do
       {:error, error} -> {:error, error}
       {:ok, role} -> {:ok, role}
     end

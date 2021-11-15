@@ -46,7 +46,18 @@ defmodule SecureX do
 
   ## Guide
 
-  You can also use SecureX as a Middleware
+  You can also use SecureX as a Middleware.
+
+  Valid inputs for permissions are "POST","GET","PUT" ,"DELETE","read","write","delete","edit" as well.
+  Permissions have downward flow. i.e if you have defined permissions for a higher operation,
+  It automatically assigns them permissions for lower operations.
+  like "edit" grants permissions for all operations. their hierarchy is in this order.
+
+  ```
+    "read" < "write" < "delete" < "edit"
+    "GET" < "POST" < "DELETE" < "PUT"
+    1 < 2 < 3 < 4
+  ```
 
   ## Middlewares
   In RestApi or GraphiQL all you have to do, add a `Plug`.
@@ -91,18 +102,6 @@ defmodule SecureX do
   defp check_permissions(_, _), do: {:error, ["Invalid Request"]}
   end
   ```
-
-   ## Permissions
-  Valid inputs for permissions are "POST","GET","PUT" ,"DELETE","read","write","delete","edit" as well.
-  Permissions have downward flow. i.e if you have defined permissions for a higher operation,
-  It automatically assigns them permissions for lower operations.
-  like "edit" grants permissions for all operations. their hierarchy is in this order.
-
-  ```
-    "read" < "write" < "delete" < "edit"
-    "GET" < "POST" < "DELETE" < "PUT"
-    1 < 2 < 3 < 4
-  ```
   """
 
   @doc """
@@ -116,8 +115,17 @@ defmodule SecureX do
       iex> has_access?(1, "Gibberish", "bad_input")
       false
   """
-  @spec has_access?(any(), string(), any()) :: boolean()
-  def has_access?(user_id, res_id, permission) when !is_nil(user_id) and !is_nil(res_id) and !is_nil(permission) do
+  @spec has_access?(any(), String.t(), any()) :: boolean()
+  def has_access?(user_id, res_id, permission) when not is_nil(user_id) and not is_nil(res_id) and not is_nil(permission) do
+    with value when is_integer(value) <- translate_permission(permission),
+         %{id: res_id} <- Context.get_resource(res_id),
+         roles <- Context.get_user_roles_by_user_id(user_id),
+         %{permission: per} <- Context.get_permission_by(res_id, roles),
+         true <- permission == per do
+      true
+    else
+      _ -> false
+    end
     case translate_permission(permission) do
       nil -> false
       permission ->
@@ -129,10 +137,7 @@ defmodule SecureX do
               nil -> false
               %{permission: per} ->
                 cond do
-                  permission == 1 and per == 1 -> true
-                  permission == 2 and per == 2 -> true
-                  permission == 3 and per == 3 -> true
-                  permission == 4 and per == 4 -> true
+                  permission == per -> true
                   true -> false
                 end
             end
@@ -141,12 +146,12 @@ defmodule SecureX do
   end
 
   defp translate_permission (permission) do
-    case permission do
-      "GET" || "get" || "READ" || "read" || "1" || 1 -> 1
-      "GET" || "get" || "READ" || "read" || "1" || 1 || "POST" || "post" || "write" || "WRITE" || "2" || 2 -> 2
-      "GET" || "get" || "READ" || "read" || "1" || 1 || "POST" || "post" || "write" || "WRITE" || "2" || 2 || "UPDATE" || "update" || "edit" || "EDIT" || "3" || 3 -> 3
-      "GET" || "get" || "READ" || "read" || "1" || 1 || "POST" || "post" || "write" || "WRITE" || "2" || 2 || "UPDATE" || "update" || "edit" || "EDIT" || "3" || 3 || "DELETE" || "delete" || "4" || 4 -> 4
-      _ -> nil
+    cond do
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1] -> 1
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2] -> 2
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "edit" , "EDIT" , "3" , 3] -> 3
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "edit" , "EDIT" , "3" , 3 , "DELETE" , "delete" , "4" , 4 ]-> 4
+      true -> nil
     end
   end
 end

@@ -67,7 +67,6 @@ defmodule SecureX.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.2"},
-      {:dialyxir, "~> 1.1"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end

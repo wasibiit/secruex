@@ -24,7 +24,7 @@ defmodule SecureX.Res do
     ]
   """
   @spec list() :: nonempty_list()
-  def list(params) do
+  def list() do
     case ResourceController.list_resources() do
       [] -> {:error, :no_resources_found}
       res -> {:ok, res}
