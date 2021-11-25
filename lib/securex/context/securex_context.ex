@@ -2,8 +2,8 @@ defmodule SecureX.SecureXContext do
   @moduledoc false
 
   import Ecto.Query, warn: false
-  alias SecureX.Repo
 
+  @repo SecureX.Repo.repo()
   alias SecureX.{Role, Permission, Resource, UserRole}
 
   @doc """
@@ -19,7 +19,7 @@ defmodule SecureX.SecureXContext do
   def list_roles do
     from(r in Role,
       order_by: [asc: r.id],
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
 
   def list_roles(offset, limit \\ 10) do
@@ -27,7 +27,7 @@ defmodule SecureX.SecureXContext do
       offset: ^offset,
       limit: ^limit,
       order_by: [asc: r.id],
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
 
   def list_roles_by() do
@@ -39,7 +39,7 @@ defmodule SecureX.SecureXContext do
         resource: p.resource_id,
         role: r.id
       }
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
 
   @doc """
@@ -67,7 +67,7 @@ defmodule SecureX.SecureXContext do
         resource: p.resource_id
       }
     )
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_role_by(role_id) do
@@ -76,7 +76,7 @@ defmodule SecureX.SecureXContext do
               |> String.replace(" ", "_" )
               |> String.downcase
     from(r in Role, where: r.id == ^role_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   @doc """
@@ -94,7 +94,7 @@ defmodule SecureX.SecureXContext do
   def create_role(attrs \\ %{}) do
     %Role{}
     |> Role.changeset(attrs)
-    |> Repo.repo().insert()
+    |> @repo.insert()
   end
 
   @doc """
@@ -112,7 +112,7 @@ defmodule SecureX.SecureXContext do
   def update_role(%Role{} = role, attrs) do
     role
     |> Role.changeset(attrs)
-    |> Repo.repo().update()
+    |> @repo.update()
   end
 
   @doc """
@@ -128,7 +128,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def delete_role(%Role{} = role) do
-    Repo.repo().delete(role)
+    @repo.delete(role)
   end
 
   @doc """
@@ -154,7 +154,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def list_resources do
-    Repo.repo().all(from(r in Resource, order_by: [asc: r.name]))
+    @repo.all(from(r in Resource, order_by: [asc: r.name]))
   end
 
   @doc """
@@ -174,7 +174,7 @@ defmodule SecureX.SecureXContext do
 
   def get_resource(res) do
     from(r in Resource, where: r.id == ^res)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_resource_by(res_id) do
@@ -183,7 +183,7 @@ defmodule SecureX.SecureXContext do
              |> String.replace(" ", "_" )
              |> String.downcase
     from(r in Resource, where: r.id == ^res_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   @doc """
@@ -201,7 +201,7 @@ defmodule SecureX.SecureXContext do
   def create_resource(attrs \\ %{}) do
     %Resource{}
     |> Resource.changeset(attrs)
-    |> Repo.repo().insert()
+    |> @repo.insert()
   end
 
   @doc """
@@ -219,7 +219,7 @@ defmodule SecureX.SecureXContext do
   def update_resource(%Resource{} = resource, attrs) do
     resource
     |> Resource.changeset(attrs)
-    |> Repo.repo().update()
+    |> @repo.update()
   end
 
   @doc """
@@ -235,7 +235,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def delete_resource(%Resource{} = resource) do
-    Repo.repo().delete(resource)
+    @repo.delete(resource)
   end
 
   @doc """
@@ -268,7 +268,7 @@ defmodule SecureX.SecureXContext do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
 
   #  def list_permissions_by(role_ids) do
@@ -282,7 +282,7 @@ defmodule SecureX.SecureXContext do
   #        permission: p.permission
   #      }
   #    )
-  #    |> Repo.repo().all
+  #    |> @repo.all
   #  end
 
   @doc """
@@ -302,17 +302,17 @@ defmodule SecureX.SecureXContext do
 
   def get_permission(res_id, role_id) do
     from(p in Permission, where: p.resource_id == ^res_id and p.role_id == ^role_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_permission(per_id) do
     from(p in Permission, where: p.id == ^per_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_permissions(role_id) do
     from(p in Permission, where: p.role_id == ^role_id)
-    |> Repo.repo().all
+    |> @repo.all
   end
 
   def get_permissions_by_res_id(res_id) do
@@ -324,7 +324,7 @@ defmodule SecureX.SecureXContext do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
 
   def get_permission_by(roles) do
@@ -336,7 +336,7 @@ defmodule SecureX.SecureXContext do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> Repo.repo().all
+    ) |> @repo.all
   end
   def get_permission_by(res_id, roles) do
     from(p in Permission,
@@ -349,7 +349,7 @@ defmodule SecureX.SecureXContext do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> Repo.repo().one
+    ) |> @repo.one
   end
 
   @doc """
@@ -367,7 +367,7 @@ defmodule SecureX.SecureXContext do
   def create_permission(attrs \\ %{}) do
     %Permission{}
     |> Permission.changeset(attrs)
-    |> Repo.repo().insert()
+    |> @repo.insert()
   end
 
   @doc """
@@ -385,7 +385,7 @@ defmodule SecureX.SecureXContext do
   def update_permission(%Permission{} = permission, attrs) do
     permission
     |> Permission.changeset(attrs)
-    |> Repo.repo().update()
+    |> @repo.update()
   end
 
   @doc """
@@ -401,7 +401,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def delete_permission(%Permission{} = permission) do
-    Repo.repo().delete(permission)
+    @repo.delete(permission)
   end
 
   @doc """
@@ -427,7 +427,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def list_user_roles do
-    Repo.repo().all(UserRole)
+    @repo.all(UserRole)
   end
 
   @doc """
@@ -446,26 +446,26 @@ defmodule SecureX.SecureXContext do
   """
   def get_user_role(user_role_id) do
     from(ur in UserRole, where: ur.id == ^user_role_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_user_role_by(user_id, role_id) do
     from(ur in UserRole, where: ur.role_id == ^role_id and ur.user_id == ^user_id)
-    |> Repo.repo().one
+    |> @repo.one
   end
 
   def get_user_roles_by(%{role_id: role_id}) do
     from(ur in UserRole,
       where: ur.role_id == ^role_id,
     )
-    |> Repo.repo().all
+    |> @repo.all
   end
   def get_user_roles_by_user_id(user_id) do
     from(ur in UserRole,
       where: ur.user_id == ^user_id,
       select: ur.role_id
     )
-    |> Repo.repo().all
+    |> @repo.all
   end
 
   @doc """
@@ -483,7 +483,7 @@ defmodule SecureX.SecureXContext do
   def create_user_role(attrs \\ %{}) do
     %UserRole{}
     |> UserRole.changeset(attrs)
-    |> Repo.repo().insert()
+    |> @repo.insert()
   end
 
   @doc """
@@ -501,7 +501,7 @@ defmodule SecureX.SecureXContext do
   def update_user_role(%UserRole{} = user_role, attrs) do
     user_role
     |> UserRole.changeset(attrs)
-    |> Repo.repo().update()
+    |> @repo.update()
   end
 
   @doc """
@@ -517,7 +517,7 @@ defmodule SecureX.SecureXContext do
 
   """
   def delete_user_role(%UserRole{} = user_role) do
-    Repo.repo().delete(user_role)
+    @repo.delete(user_role)
   end
 
   @doc """

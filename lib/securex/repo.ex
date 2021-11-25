@@ -1,10 +1,9 @@
-defmodule SecureX.Repo do
+  defmodule SecureX.Repo do
   @moduledoc false
 
   # Dynamic Repo Of Current App
   def repo do
     :securex
-    |> Application.fetch_env!(SecureX.Repo)
-    |> Keyword.fetch!(:repo)
+    |> Application.fetch_env!(:repo)
   end
 end

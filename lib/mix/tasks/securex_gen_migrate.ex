@@ -34,7 +34,7 @@ if Code.ensure_loaded?(Ecto) do
       )
     end
 
-    defp timestamp(acc \\ 1) do
+    defp timestamp(acc) do
       {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
       "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss + acc)}"
     end
