@@ -50,7 +50,7 @@ if Code.ensure_loaded?(Ecto) do
           <% :role ->  %>
             def change do
               create table(:roles, primary_key: false) do
-                add :role, :string, null: false, primary_key: true, unique: true
+                add :id, :string, null: false, primary_key: true, unique: true
                 add :name, :string
 
                 timestamps()
