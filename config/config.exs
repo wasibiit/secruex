@@ -8,7 +8,7 @@
 use Mix.Config
 
 config :securex,
-  ecto_repos: [SecureX.Repo]
+  ecto_repos: [SecureX.Repo.repo()]
 
 # Configures the endpoint
 config :securex, SecureXWeb.Endpoint,
