@@ -76,7 +76,7 @@ defmodule SecureX.Res do
 
   ## Examples
 
-      iex> update(%{"id" => "person_farm", "name" => "Person Organization"})
+      iex> update(%{"id" => "person_farm", "res" => "Person Organization"})
       %Resource{
         id: "person_organization",
         name: "Person Organization",

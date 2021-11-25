@@ -108,8 +108,8 @@ defmodule SecureXWeb.ResourceController do
   @spec update(map()) :: struct()
   def update(params) when params !== %{} do
     case params do
-      %{res: res_id} -> update_res_sage(res_id, params)
-      %{"res" => res_id} ->
+      %{id: res_id} -> update_res_sage(res_id, params)
+      %{"id" => res_id} ->
         params = Common.keys_to_atoms(params)
         update_res_sage(res_id, params)
       _-> {:error, :bad_input}

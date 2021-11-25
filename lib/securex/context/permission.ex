@@ -17,6 +17,9 @@ defmodule SecureX.Permission do
   def changeset(permission, attrs) do
     permission
     |> cast(attrs, [:permission, :resource_id, :role_id])
-    |> validate_required([:permission])
+    |> validate_required([:permission, :role_id, :resource_id])
+    |> unique_constraint([:role_id, :resource_id])
+    |> foreign_key_constraint(:role_id)
+    |> foreign_key_constraint(:resource_id)
   end
 end

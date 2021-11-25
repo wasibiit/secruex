@@ -52,7 +52,7 @@ defmodule SecureXWeb.PermissionController do
 
   defp create_per_sage(params) do
     with nil <- Context.get_permission(params.resource_id, params.role_id),
-         {:ok, per} <- Context.create_resource(params) do
+         {:ok, per} <- Context.create_permission(params) do
       {:ok, per}
     else
       %{__struct__: _} -> {:error, :alrady_exist}
