@@ -63,7 +63,7 @@ defmodule SecureX.MixProject do
       {:cowboy, "~> 2.9"},
       {:plug_cowboy, "~> 2.2"},
       {:phoenix, "~> 1.5"},
-      {:phoenix_html, "~> 2.14.1"},
+      {:phoenix_html, "~>  3.1.0"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.18.2"},
       {:jason, "~> 1.2"},
