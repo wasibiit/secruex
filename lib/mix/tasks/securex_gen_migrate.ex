@@ -17,12 +17,13 @@ if Code.ensure_loaded?(Ecto) do
         migrations = [role: "create_table_roles", res: "create_table_resources", permission: "create_table_permission", user_roles: "create_table_user_roles"]
 
         Enum.each(migrations, fn {key, value} ->
+          time = timestamp()
           content =
             [mod: Module.concat([repo, Migrations, camelize(value)])]
             |> (fn f -> f ++ [check: key] end).()
             |> migration_template
             |> format_string!
-          file = Path.join(path, "#{timestamp()}_#{underscore(value)}.exs")
+          file = Path.join(path, "#{time}_#{underscore(value)}.exs")
           |> create_file(content)
           if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
             Mix.Task.run("ecto.migrate", [repo])
@@ -30,11 +31,6 @@ if Code.ensure_loaded?(Ecto) do
         end)
       end
       )
-    end
-
-    defp timestamp do
-      {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
-      "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
     end
 
     defp pad(i) when i < 10, do: <<?0, ?0 + i>>
