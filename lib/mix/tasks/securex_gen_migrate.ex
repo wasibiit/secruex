@@ -16,8 +16,8 @@ if Code.ensure_loaded?(Ecto) do
         create_directory(path)
         migrations = [role: "create_table_roles", res: "create_table_resources", permission: "create_table_permission", user_roles: "create_table_user_roles"]
 
-        Enum.each(migrations, fn {key, value} ->
-          time = timestamp()
+        Enum.reduce(migrations, 1, fn {key, value}, acc ->
+          time = timestamp(acc)
           content =
             [mod: Module.concat([repo, Migrations, camelize(value)])]
             |> (fn f -> f ++ [check: key] end).()
@@ -28,14 +28,15 @@ if Code.ensure_loaded?(Ecto) do
           if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
             Mix.Task.run("ecto.migrate", [repo])
           end
+          acc + 1
         end)
       end
       )
     end
 
-    defp timestamp do
+    defp timestamp(acc \\ 1) do
       {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
-      "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
+      "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss + acc)}"
     end
     defp pad(i) when i < 10, do: <<?0, ?0 + i>>
     defp pad(i), do: to_string(i)
