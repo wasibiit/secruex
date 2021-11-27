@@ -8,7 +8,7 @@ defmodule SecureX.MixProject do
       elixir: "~> 1.12 ",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
-      description: "SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions.",
+      description: "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -30,7 +30,7 @@ defmodule SecureX.MixProject do
 
   defp description do
     """
-    SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions.
+    SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
     """
   end
 
@@ -40,7 +40,7 @@ defmodule SecureX.MixProject do
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
-      description: "SecureX is Role Based Access Control(RBAC). It will handle user roles and permissions."
+      description: "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions."
     ]
   end
 

@@ -18,7 +18,7 @@ defmodule SecureX.SecureXContext do
 
   def list_roles do
     from(r in Role,
-      order_by: [asc: r.id],
+      order_by: [asc: r.id]
     ) |> Repo.repo().all
   end
 
@@ -26,7 +26,7 @@ defmodule SecureX.SecureXContext do
     from(r in Role,
       offset: ^offset,
       limit: ^limit,
-      order_by: [asc: r.id],
+      order_by: [asc: r.id]
     ) |> Repo.repo().all
   end
 
@@ -453,7 +453,7 @@ defmodule SecureX.SecureXContext do
 
   def get_user_roles_by(%{role_id: role_id}) do
     from(ur in UserRole,
-      where: ur.role_id == ^role_id,
+      where: ur.role_id == ^role_id
     )
     |> Repo.repo().all
   end

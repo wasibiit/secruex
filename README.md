@@ -1,6 +1,8 @@
 # SecureX
 
-SecureX is an Elixir Library to handle your RBAC (Role Based Access Control).
+SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
+You can handle all list of permissions attached to a specific object for certain users or give limited or full Access to specific
+module.
 
 It has 4 basic modules, `SecureX.Roles`, `SecureX.Res`, `SecureX.Permissions` and `SecureX.UserRoles`.
 All Modules have CRUD to maintain your RBAC.
@@ -13,9 +15,9 @@ If installing from Hex, use the latest version from there:
   # mix.ex
 
   def deps do
-  [
-    {:securex, "~> 0.3.0"}
-  ]
+    [
+      {:securex, "~> 0.3.4"}
+    ]
   end
   ```
 Now You need to add configuration for `securex` in your `config/config.ex`
