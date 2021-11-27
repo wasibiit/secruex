@@ -10,15 +10,6 @@ use Mix.Config
 config :securex,
   ecto_repos: [SecureX.Repo]
 
-config :securex, SecureXWeb.Endpoint, server: false
-
-# Configures the endpoint
-config :securex, SecureXWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "SiJ4QiVaObP7J5QecBt9IdQTThYJkKJXEVGgVhUHBMHv84mgDArA4QtPveIBV3LX",
-  render_errors: [view: SecureXWeb.ErrorView, accepts: ~w(json)]
-#  pubsub: [name: SecureX.PubSub, adapter: Phoenix.PubSub.PG2]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
