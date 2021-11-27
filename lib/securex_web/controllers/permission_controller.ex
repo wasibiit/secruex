@@ -3,7 +3,7 @@ defmodule SecureXWeb.PermissionController do
 
   use SecureXWeb, :controller
   alias SecureX.Common
-  alias SecureX.SecureXContext, as: Context
+  alias SecureX.Context
 
   @doc """
   Get list of Permissions By Roles,

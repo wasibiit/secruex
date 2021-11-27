@@ -16,7 +16,7 @@ If installing from Hex, use the latest version from there:
 
   def deps do
     [
-      {:securex, "~> 0.3.4"}
+      {:securex, "~> 0.3.5"}
     ]
   end
   ```

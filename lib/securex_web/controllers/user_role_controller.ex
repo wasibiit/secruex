@@ -3,7 +3,7 @@ defmodule SecureXWeb.UserRoleController do
 
   use SecureXWeb, :controller
   alias SecureX.Common
-  alias SecureX.SecureXContext, as: Context
+  alias SecureX.Context
 
   @doc """
   Get list of UserRoles by `user_id`,

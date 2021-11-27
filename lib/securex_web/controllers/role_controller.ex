@@ -4,7 +4,7 @@ defmodule SecureXWeb.RoleController do
   import Macro, only: [camelize: 1]
   use SecureXWeb, :controller
   alias SecureX.Common
-  alias SecureX.SecureXContext, as: Context
+  alias SecureX.Context
 
   @doc """
   Get list of roles with permissions,

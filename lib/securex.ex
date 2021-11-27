@@ -1,5 +1,5 @@
 defmodule SecureX do
-  alias SecureX.SecureXContext, as: Context
+  alias SecureX.Context
 
   @moduledoc """
   SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
@@ -18,7 +18,7 @@ defmodule SecureX do
 
   def deps do
   [
-    {:securex, "~> 0.3.4"}
+    {:securex, "~> 0.3.5"}
   ]
   end
   ```
