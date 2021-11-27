@@ -28,7 +28,7 @@ defmodule SecureXWeb.RoleController do
   """
   @spec list_roles() :: nonempty_list()
   def list_roles() do
-    Context.list_roles_by()
+    Context.list_roles()
   end
 
   @doc """

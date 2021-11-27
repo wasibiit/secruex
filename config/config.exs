@@ -10,6 +10,8 @@ use Mix.Config
 config :securex,
   ecto_repos: [SecureX.Repo]
 
+config :securex, SecureXWeb.Endpoint, server: false
+
 # Configures the endpoint
 config :securex, SecureXWeb.Endpoint,
   url: [host: "localhost"],
