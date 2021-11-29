@@ -16,6 +16,9 @@ defmodule SecureX.Context do
 
   """
 
+  @spec preload_role(%Role{}) :: %Role{}
+  def preload_role(data), do: repo().preload(data, [:permissions])
+
   def list_roles do
     from(r in Role,
       order_by: [asc: r.id]
@@ -34,11 +37,7 @@ defmodule SecureX.Context do
     from(r in Role,
       left_join: p in Permission, on: p.role_id == r.id,
       order_by: [asc: r.id],
-      select: %{
-        permission: p.permission,
-        resource: p.resource_id,
-        role: r.id
-      }
+      preload: [{:permissions, p}]
     ) |> repo().all
   end
 
@@ -60,12 +59,7 @@ defmodule SecureX.Context do
     from(r in Role,
       left_join: p in Permission, on: p.role_id == r.id,
       where: r.id == ^role_id,
-      select: %{
-        id: r.id,
-        name: r.name,
-        permission: p.permission,
-        resource: p.resource_id
-      }
+      preload: [{:permissions, p}]
     )
     |> repo().one
   end
@@ -153,6 +147,9 @@ defmodule SecureX.Context do
       [%Resource{}, ...]
 
   """
+  @spec preload_resources(%Resource{}) :: %Resource{}
+  def preload_resources(data), do: repo().preload(data, [])
+
   def list_resources do
     repo().all(from(r in Resource, order_by: [asc: r.name]))
   end
@@ -260,6 +257,10 @@ defmodule SecureX.Context do
       [%Permission{}, ...]
 
   """
+
+  @spec preload_permissions(%Permission{}) :: %Permission{}
+  def preload_permissions(data), do: repo().preload(data, [:role, :resource])
+
   def list_permissions(roles) do
     from(p in Permission,
       where: p.role_id in ^roles,
@@ -301,17 +302,20 @@ defmodule SecureX.Context do
   """
 
   def get_permission(res_id, role_id) do
-    from(p in Permission, where: p.resource_id == ^res_id and p.role_id == ^role_id)
+    from(p in Permission,
+      where: p.resource_id == ^res_id and p.role_id == ^role_id,
+      preload: [:resource, :role]
+    )
     |> repo().one
   end
 
   def get_permission(per_id) do
-    from(p in Permission, where: p.id == ^per_id)
+    from(p in Permission, where: p.id == ^per_id, preload: [:resource, :role])
     |> repo().one
   end
 
   def get_permissions(role_id) do
-    from(p in Permission, where: p.role_id == ^role_id)
+    from(p in Permission, where: p.role_id == ^role_id, preload: [:resource, :role])
     |> repo().all
   end
 
@@ -423,8 +427,16 @@ defmodule SecureX.Context do
       [%UserRole{}, ...]
 
   """
+  @spec preload_user_roles(%UserRole{}) :: %UserRole{}
+  def preload_user_roles(data), do: repo().preload(data, [:role, :user])
+
   def list_user_roles do
     repo().all(UserRole)
+  end
+
+  def list_user_role_by_user_id(user_id) do
+    from(ur in UserRole, where: ur.user_id == ^user_id)
+    |> repo().all
   end
 
   @doc """

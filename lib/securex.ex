@@ -16,19 +16,21 @@ defmodule SecureX do
   ```elixir
   # mix.ex
 
-  def deps do
-  [
-    {:securex, "~> 0.3.6"}
-  ]
+   def deps do
+    [
+      {:securex, "~> 0.3.7"}
+    ]
   end
   ```
   Now You need to add configuration for `securex` in your `config/config.ex`
   You need to add Your Repo and User Schema in config.
+  If you are using `binary_id` type for your project default as `@primary_keys`. You can pass `type: :binary_id`.
   ```elixir
   # config/config.exs
 
-  config :securex, repo: MyApp.Repo,
-   schema: MyApp.Schema.User
+  config :securex, repo: MyApp.Repo, #required
+   schema: MyApp.Schema.User, #required
+   type: :binary_id #optional
   ```
   SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
   ```elixir
@@ -128,27 +130,10 @@ defmodule SecureX do
          %{id: res_id} <- Context.get_resource(res_id),
          roles <- Context.get_user_roles_by_user_id(user_id),
          %{permission: per} <- Context.get_permission_by(res_id, roles),
-         true <- permission == per do
+         true <- value <= per do
       true
     else
       _ -> false
-    end
-    case translate_permission(permission) do
-      nil -> false
-      permission ->
-        case Context.get_resource(res_id) do
-          nil -> false
-          %{id: res_id} ->
-            roles = Context.get_user_roles_by_user_id(user_id)
-            case Context.get_permission_by(res_id, roles) do
-              nil -> false
-              %{permission: per} ->
-                cond do
-                  permission == per -> true
-                  true -> false
-                end
-            end
-        end
     end
   end
 

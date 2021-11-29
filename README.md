@@ -16,17 +16,19 @@ If installing from Hex, use the latest version from there:
 
   def deps do
     [
-      {:securex, "~> 0.3.6"}
+      {:securex, "~> 0.3.7"}
     ]
   end
   ```
 Now You need to add configuration for `securex` in your `config/config.ex`
-You need to add Your Repo and User Schema in config.
+You need to add Your Repo and User Schema in config. 
+If you are using `binary_id` type for your project default as `@primary_keys`. You can pass `type: :binary_id`.
   ```elixir
   # config/config.exs
 
-  config :securex, repo: MyApp.Repo,
-   schema: MyApp.Schema.User
+  config :securex, repo: MyApp.Repo, #required
+   schema: MyApp.Schema.User, #required
+   type: :binary_id #optional
   ```
 SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
   ```elixir

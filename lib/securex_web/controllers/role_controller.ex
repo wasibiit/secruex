@@ -28,7 +28,7 @@ defmodule SecureXWeb.RoleController do
   """
   @spec list_roles() :: nonempty_list()
   def list_roles() do
-    Context.list_roles()
+    Context.list_roles_by()
   end
 
   @doc """
@@ -114,8 +114,11 @@ defmodule SecureXWeb.RoleController do
           [] -> {:ok, :no_resources_found}
           resources ->
             {:ok,
-              Enum.each(resources, fn %{id: res_id} ->
-                Context.create_permission(%{resource_id: res_id, role_id: role_id, permission: -1})
+              Enum.flat_map(resources, fn %{id: res_id} ->
+                case Context.create_permission(%{resource_id: res_id, role_id: role_id, permission: -1}) do
+                  {:ok, permission} -> [permission]
+                  {:error, _} -> []
+                end
               end)
             }
         end
@@ -138,8 +141,8 @@ defmodule SecureXWeb.RoleController do
   @spec update(map()) :: struct()
   def update(params) when params !== %{} do
     case params do
-      %{id: role_id} -> update_role_sage(role_id, params)
-      %{"id" => role_id} ->
+      %{id: role_id, role: _} -> update_role_sage(role_id, params)
+      %{"id" => role_id, "role" => _} ->
         params = Common.keys_to_atoms(params)
         update_role_sage(role_id, params)
       _-> {:error, :bad_input}
@@ -161,8 +164,8 @@ defmodule SecureXWeb.RoleController do
   defp update_role(prev_role, %{role: new_role}) do
     name = new_role |> String.trim
     updated_role = name
-           |> String.downcase
-           |> String.replace(" ", "_")
+                   |> String.downcase
+                   |> String.replace(" ", "_")
     if(prev_role.id !== updated_role) do
       new_role = Context.create_role(%{id: updated_role, name: camelize(name)})
       case Context.get_permissions(prev_role.id) do
@@ -175,7 +178,7 @@ defmodule SecureXWeb.RoleController do
       end
       Context.delete_role(prev_role)
       new_role
-      else
+    else
       {:ok, prev_role}
     end
   end
@@ -189,7 +192,7 @@ defmodule SecureXWeb.RoleController do
             update_permission(resource_id, permission, role.id)
           %{resource_id: resource_id, permission: permission} ->
             update_permission(resource_id, permission, role.id)
-            _-> :bad_input
+          _-> :bad_input
         end
       end)
     {:ok, Map.merge(role, %{permissions: permissions})}
@@ -242,8 +245,12 @@ defmodule SecureXWeb.RoleController do
     case Context.get_permissions(role_id) do
       [] -> {:ok, :already_removed}
       permissions ->
-        Enum.map(permissions, fn per -> Context.delete_permission(per) end)
-        {:ok, :successfully_removed_permissions}
+        {:ok, Enum.flat_map(permissions, fn per ->
+          case Context.delete_permission(per) do
+            {:ok, permissions} -> [permissions]
+            {:error, _} -> []
+          end
+        end)}
     end
   end
   defp remove_permissions(_), do: {:ok, :invalid_role_id}

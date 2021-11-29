@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Ecto) do
-  defmodule Mix.Tasks.SecureX.Gen.Migrate do
+  defmodule Mix.Tasks.SecureX.Gen.Migration do
     @moduledoc "The SecureX mix task to create migrations into your project `priv/repo/migrations` folder"
     use Mix.Task
 
@@ -24,7 +24,7 @@ if Code.ensure_loaded?(Ecto) do
             |> migration_template
             |> format_string!
           file = Path.join(path, "#{time}_#{underscore(value)}.exs")
-          |> create_file(content)
+                 |> create_file(content)
           if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
             Mix.Task.run("ecto.migrate", [repo])
           end
@@ -55,7 +55,6 @@ if Code.ensure_loaded?(Ecto) do
 
                 timestamps()
               end
-              create unique_index(:roles, [:id])
             end
         <% :res ->  %>
             def change do
@@ -65,7 +64,6 @@ if Code.ensure_loaded?(Ecto) do
 
                 timestamps()
               end
-              create unique_index(:resources, [:id])
             end
         <% :permission ->  %>
             def change do

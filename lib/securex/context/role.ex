@@ -9,6 +9,8 @@ defmodule SecureX.Role do
     field :id, :string, primary_key: true
     field :name, :string
 
+    has_many :permissions, SecureX.Permission, foreign_key: :role_id, references: :id
+
     timestamps()
   end
 
