@@ -32,9 +32,9 @@ defmodule SecureX do
    schema: MyApp.Schema.User, #required
    type: :binary_id #optional
   ```
-  SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
+  SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migration`.
   ```elixir
-  iex> mix secure_x.gen.migrate
+  iex> mix secure_x.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
   * creating priv/repo/migrations/20211112222439_create_table_resources.exs
@@ -107,8 +107,8 @@ defmodule SecureX do
   end
   ```
   You are all set.
-  Please let us know about and open issue on https://github.com/DevWasi/secruex/issues
-  Looking Forward to it.
+  Please let us know about the issues and open issue on https://github.com/DevWasi/secruex/issues
+  Looking Forward to it :D.
 
   Happy Coding !!!!!
   """

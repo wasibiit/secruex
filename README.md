@@ -30,9 +30,9 @@ If you are using `binary_id` type for your project default as `@primary_keys`. Y
    schema: MyApp.Schema.User, #required
    type: :binary_id #optional
   ```
-SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migrate`.
+SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migration`.
   ```elixir
-  iex> mix secure_x.gen.migrate
+  iex> mix secure_x.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
   * creating priv/repo/migrations/20211112222439_create_table_resources.exs
