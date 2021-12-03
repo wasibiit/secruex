@@ -97,11 +97,12 @@ defmodule SecureX do
     end
   end
 
-  defp check_permissions(%{body_params: %{"resource" => res, "permission" => permission}} = conn, %{id: user_id}) do
-    case SecureX.has_access?(user_id, res, permission) do
-        false -> {:error, false}
-        true -> {:ok, conn}
-      end
+  defp check_permissions(%{method: method, path_info: path_info} = conn, %{id: user_id}) do
+    res = List.last(path_info)
+    case SecureX.has_access?(user_id, res, method) do
+      false -> {:error, false}
+      true -> {:ok, conn}
+    end
   end
   defp check_permissions(_, _), do: {:error, ["Invalid Request"]}
   end
