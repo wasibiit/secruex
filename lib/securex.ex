@@ -142,8 +142,8 @@ defmodule SecureX do
     cond do
       permission in ["GET" , "get" , "READ" , "read" , "1" , 1] -> 1
       permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2] -> 2
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "edit" , "EDIT" , "3" , 3] -> 3
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "edit" , "EDIT" , "3" , 3 , "DELETE" , "delete" , "4" , 4 ]-> 4
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "PUT" , "put" , "edit" , "EDIT" , "3" , 3] -> 3
+      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "PUT" , "put" , "edit" , "EDIT" , "3" , 3 , "DELETE" , "delete" , "DROP" , "drop" , "REMOVE" , "remove" , "4" , 4 ]-> 4
       true -> nil
     end
   end
