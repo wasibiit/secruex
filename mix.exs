@@ -4,8 +4,7 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "0.3.7",
-      elixir: "~> 1.12 ",
+      version: "0.3.8",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       description: "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",

@@ -18,7 +18,7 @@ defmodule SecureX do
 
    def deps do
     [
-      {:securex, "~> 0.3.7"}
+      {:securex, "~> 0.3.8"}
     ]
   end
   ```
