@@ -1,4 +1,5 @@
 [![Build status](https://api.cirrus-ci.com/github/elixir-lang/elixir.svg?branch=main)](https://cirrus-ci.com/github/elixir-lang/elixir)
+[![License](https://img.shields.io/github/license/wasitanbits/secruex)](https://img.shields.io/github/license/wasitanbits/secruex)
 
 # SecureX
 
