@@ -1,3 +1,5 @@
+[![Build status](https://api.cirrus-ci.com/github/elixir-lang/elixir.svg?branch=main)](https://cirrus-ci.com/github/elixir-lang/elixir)
+
 # SecureX
 
 SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
