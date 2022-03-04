@@ -39,9 +39,9 @@ SecureX comes with built-in support for apps. Just create migrations with `mix s
   iex> mix secure_x.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
-  * creating priv/repo/migrations/20211112222439_create_table_resources.exs
-  * creating priv/repo/migrations/20211112222439_create_table_permissions.exs
-  * creating priv/repo/migrations/20211112222439_create_table_user_roles.exs
+  * creating priv/repo/migrations/20211112222440_create_table_resources.exs
+  * creating priv/repo/migrations/20211112222441_create_table_permissions.exs
+  * creating priv/repo/migrations/20211112222442_create_table_user_roles.exs
   ```
 The Migrations added to your project.
   ```elixir
