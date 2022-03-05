@@ -1,23 +1,20 @@
 defmodule SecureX.Permissions do
-  alias SecureXWeb.{ PermissionController }
+  alias SecureXWeb.{PermissionController}
 
   @moduledoc """
   Contains CRUD For Permissions.
   """
 
   @doc """
-  Get list of Permissions by User Roles
+  Get list of Permissions by User Roles.
 
   ## Examples
 
       iex> list(["owner", "super_admin"])
       [
-      ...
       %{ permission: 4, resource_id: "users", role_id: "admin"},
-      ...
-      %{ permission: 4, resource_id: "person_form", role_id: "super_admin"},
-      ...
-    ]9
+      %{ permission: 4, resource_id: "person_form", role_id: "super_admin"}
+     ]
   """
   @spec list(list()) :: nonempty_list()
   def list(params) do
@@ -28,7 +25,7 @@ defmodule SecureX.Permissions do
   end
 
   @doc """
-  Add a Permission. You can send either `Atom Map` or `String Map` to add Permission.
+  Add a Permission. You can send either `Atom Map` or `String Map` to add a Permission.
 
   ## Examples
 
@@ -49,7 +46,7 @@ defmodule SecureX.Permissions do
   end
 
   @doc """
-  Update a Permission. You can send either `Atom Map` or `String Map` to update Permission.
+  Update a Permission. You can send either `Atom Map` or `String Map` to update a Permission.
 
    ## Examples
 

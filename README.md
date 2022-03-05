@@ -4,7 +4,7 @@
 
 # SecureX
 
-SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
+SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle "User Roles And Permissions".
 You can handle all list of permissions attached to a specific object for certain users or give limited or full Access to specific
 module.
 
@@ -34,9 +34,9 @@ If you are using `binary_id` type for your project default as `@primary_keys`. Y
    schema: MyApp.Schema.User, #required
    type: :binary_id #optional
   ```
-SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migration`.
+SecureX comes with built-in support for apps. Just create migrations with `mix securex.gen.migration`.
   ```elixir
-  iex> mix secure_x.gen.migration
+  iex> mix securex.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
   * creating priv/repo/migrations/20211112222440_create_table_resources.exs
@@ -54,7 +54,7 @@ You are Now Up and Running!!!
 
 You can also use SecureX as a Middleware.
 
-Valid inputs for permissions are "POST","GET","PUT" ,"DELETE","read","write","delete","edit" as well.
+Valid inputs for permissions are "POST", "GET", "PUT", "DELETE", "read", "write", "delete" and "edit".
 Permissions have downward flow. i.e if you have defined permissions for a higher operation,
 It automatically assigns them permissions for lower operations.
 like "edit" grants permissions for all operations. their hierarchy is in this order.

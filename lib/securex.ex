@@ -2,7 +2,7 @@ defmodule SecureX do
   alias SecureX.Context
 
   @moduledoc """
-  SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.
+  SecureX (An Advancement To ACL) is Role Based Access Control(RBAC) and Access Control List (ACL) to handle "User Roles And Permissions".
   You can handle all list of permissions attached to a specific object for certain users or give limited or full Access to specific
   module.
 
@@ -22,7 +22,7 @@ defmodule SecureX do
     ]
   end
   ```
-  Now You need to add configuration for `securex` in your `config/config.ex`
+  Now You need to add configuration for `securex` in your `config/config.ex`.
   You need to add Your Repo and User Schema in config.
   If you are using `binary_id` type for your project default as `@primary_keys`. You can pass `type: :binary_id`.
   ```elixir
@@ -34,7 +34,7 @@ defmodule SecureX do
   ```
   SecureX comes with built-in support for apps. Just create migrations with `mix secure_x.gen.migration`.
   ```elixir
-  iex> mix secure_x.gen.migration
+  iex> mix securex.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
   * creating priv/repo/migrations/20211112222439_create_table_resources.exs
@@ -52,10 +52,10 @@ defmodule SecureX do
 
   You can also use SecureX as a Middleware.
 
-  Valid inputs for permissions are "POST","GET","PUT" ,"DELETE","read","write","delete","edit" as well.
+  Valid inputs for permissions are "POST", "GET" ,"PUT" ,"DELETE" ,"read" ,"write" ,"delete" and "edit".
   Permissions have downward flow. i.e if you have defined permissions for a higher operation,
   It automatically assigns them permissions for lower operations.
-  like "edit" grants permissions for all operations. their hierarchy is in this order.
+  like "edit" grants permissions for all operations. Their hierarchy is in this order.
 
   ```
     "read" < "write" < "delete" < "edit"
@@ -108,7 +108,7 @@ defmodule SecureX do
   end
   ```
   You are all set.
-  Please let us know about the issues and open issue on https://github.com/DevWasi/secruex/issues
+  Please let us know about the issues and open issue on https://github.com/DevWasi/secruex/issues.
   Looking Forward to it :D.
 
   Happy Coding !!!!!
@@ -126,7 +126,8 @@ defmodule SecureX do
       false
   """
   @spec has_access?(any(), String.t(), any()) :: boolean()
-  def has_access?(user_id, res_id, permission) when not is_nil(user_id) and not is_nil(res_id) and not is_nil(permission) do
+  def has_access?(user_id, res_id, permission)
+      when not is_nil(user_id) and not is_nil(res_id) and not is_nil(permission) do
     with value when is_integer(value) <- translate_permission(permission),
          %{id: res_id} <- Context.get_resource(res_id),
          roles <- Context.get_user_roles_by_user_id(user_id),
@@ -138,13 +139,85 @@ defmodule SecureX do
     end
   end
 
-  defp translate_permission (permission) do
+  defp translate_permission(permission) do
     cond do
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1] -> 1
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2] -> 2
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "PUT" , "put" , "edit" , "EDIT" , "3" , 3] -> 3
-      permission in ["GET" , "get" , "READ" , "read" , "1" , 1 , "POST" , "post" , "write" , "WRITE" , "2" , 2 , "UPDATE" , "update" , "PUT" , "put" , "edit" , "EDIT" , "3" , 3 , "DELETE" , "delete" , "DROP" , "drop" , "REMOVE" , "remove" , "4" , 4 ]-> 4
-      true -> nil
+      permission in ["GET", "get", "READ", "read", "1", 1] ->
+        1
+
+      permission in [
+        "GET",
+        "get",
+        "READ",
+        "read",
+        "1",
+        1,
+        "POST",
+        "post",
+        "write",
+        "WRITE",
+        "2",
+        2
+      ] ->
+        2
+
+      permission in [
+        "GET",
+        "get",
+        "READ",
+        "read",
+        "1",
+        1,
+        "POST",
+        "post",
+        "write",
+        "WRITE",
+        "2",
+        2,
+        "UPDATE",
+        "update",
+        "PUT",
+        "put",
+        "edit",
+        "EDIT",
+        "3",
+        3
+      ] ->
+        3
+
+      permission in [
+        "GET",
+        "get",
+        "READ",
+        "read",
+        "1",
+        1,
+        "POST",
+        "post",
+        "write",
+        "WRITE",
+        "2",
+        2,
+        "UPDATE",
+        "update",
+        "PUT",
+        "put",
+        "edit",
+        "EDIT",
+        "3",
+        3,
+        "DELETE",
+        "delete",
+        "DROP",
+        "drop",
+        "REMOVE",
+        "remove",
+        "4",
+        4
+      ] ->
+        4
+
+      true ->
+        nil
     end
   end
 end

@@ -2,8 +2,7 @@ defmodule SecureXWeb.PermissionController do
   @moduledoc false
 
   use SecureXWeb, :controller
-  alias SecureX.Common
-  alias SecureX.Context
+  alias SecureX.{Common,Context}
 
   @doc """
   Get list of Permissions By Roles,
@@ -23,6 +22,7 @@ defmodule SecureXWeb.PermissionController do
   def list_permissions(params) when params !== [] do
     Context.list_permissions(params)
   end
+
   def list_permissions(_), do: {:error, :bad_input}
 
   @doc """
@@ -41,13 +41,18 @@ defmodule SecureXWeb.PermissionController do
   @spec create(map()) :: struct()
   def create(params) when params !== %{} do
     case params do
-      %{resource_id: _, role_id: _} -> create_per_sage(params)
+      %{resource_id: _, role_id: _} ->
+        create_per_sage(params)
+
       %{"resource_id" => _, "role_id" => _} ->
         params = Common.keys_to_atoms(params)
         create_per_sage(params)
-      _-> {:error, :bad_input}
+
+      _ ->
+        {:error, :bad_input}
     end
   end
+
   def create(_), do: {:error, :bad_input}
 
   defp create_per_sage(params) do
@@ -76,13 +81,18 @@ defmodule SecureXWeb.PermissionController do
   @spec update(map()) :: struct()
   def update(params) when params !== %{} do
     case params do
-      %{id: per_id} -> update_per_sage(per_id, params)
+      %{id: per_id} ->
+        update_per_sage(per_id, params)
+
       %{"id" => per_id} ->
         params = Common.keys_to_atoms(params)
         update_per_sage(per_id, params)
-      _-> {:error, :bad_input}
+
+      _ ->
+        {:error, :bad_input}
     end
   end
+
   def update(_), do: {:error, :bad_input}
 
   defp update_per_sage(per_id, params) do
@@ -113,9 +123,10 @@ defmodule SecureXWeb.PermissionController do
     case params do
       %{id: per_id} -> delete_per_sage(per_id)
       %{"id" => per_id} -> delete_per_sage(per_id)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def delete(_), do: {:error, :bad_input}
 
   defp delete_per_sage(per_id) do

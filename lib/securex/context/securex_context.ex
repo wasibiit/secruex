@@ -16,13 +16,14 @@ defmodule SecureX.Context do
 
   """
 
-  @spec preload_role(%Role{}) :: %Role{}
+  @spec preload_role(struct()) :: struct()
   def preload_role(data), do: repo().preload(data, [:permissions])
 
   def list_roles do
     from(r in Role,
       order_by: [asc: r.id]
-    ) |> repo().all
+    )
+    |> repo().all
   end
 
   def list_roles(offset, limit \\ 10) do
@@ -30,15 +31,18 @@ defmodule SecureX.Context do
       offset: ^offset,
       limit: ^limit,
       order_by: [asc: r.id]
-    ) |> repo().all
+    )
+    |> repo().all
   end
 
   def list_roles_by() do
     from(r in Role,
-      left_join: p in Permission, on: p.role_id == r.id,
+      left_join: p in Permission,
+      on: p.role_id == r.id,
       order_by: [asc: r.id],
       preload: [{:permissions, p}]
-    ) |> repo().all
+    )
+    |> repo().all
   end
 
   @doc """
@@ -57,7 +61,8 @@ defmodule SecureX.Context do
   """
   def get_role(role_id) do
     from(r in Role,
-      left_join: p in Permission, on: p.role_id == r.id,
+      left_join: p in Permission,
+      on: p.role_id == r.id,
       where: r.id == ^role_id,
       preload: [{:permissions, p}]
     )
@@ -65,10 +70,12 @@ defmodule SecureX.Context do
   end
 
   def get_role_by(role_id) do
-    role_id = role_id
-              |> String.trim
-              |> String.replace(" ", "_" )
-              |> String.downcase
+    role_id =
+      role_id
+      |> String.trim()
+      |> String.replace(" ", "_")
+      |> String.downcase()
+
     from(r in Role, where: r.id == ^role_id)
     |> repo().one
   end
@@ -147,7 +154,7 @@ defmodule SecureX.Context do
       [%Resource{}, ...]
 
   """
-  @spec preload_resources(%Resource{}) :: %Resource{}
+  @spec preload_resources(struct()) :: struct()
   def preload_resources(data), do: repo().preload(data, [])
 
   def list_resources do
@@ -175,10 +182,12 @@ defmodule SecureX.Context do
   end
 
   def get_resource_by(res_id) do
-    res_id = res_id
-             |> String.trim
-             |> String.replace(" ", "_" )
-             |> String.downcase
+    res_id =
+      res_id
+      |> String.trim()
+      |> String.replace(" ", "_")
+      |> String.downcase()
+
     from(r in Resource, where: r.id == ^res_id)
     |> repo().one
   end
@@ -258,7 +267,7 @@ defmodule SecureX.Context do
 
   """
 
-  @spec preload_permissions(%Permission{}) :: %Permission{}
+  @spec preload_permissions(struct()) :: struct()
   def preload_permissions(data), do: repo().preload(data, [:role, :resource])
 
   def list_permissions(roles) do
@@ -269,7 +278,8 @@ defmodule SecureX.Context do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> repo().all
+    )
+    |> repo().all
   end
 
   #  def list_permissions_by(role_ids) do
@@ -321,7 +331,8 @@ defmodule SecureX.Context do
 
   def get_permissions_by_res_id(res_id) do
     from(p in Permission,
-      join: r in Resource, on: p.resource_id == r.id,
+      join: r in Resource,
+      on: p.resource_id == r.id,
       where: p.resource_id == ^res_id,
       select: p
     )
@@ -330,15 +341,18 @@ defmodule SecureX.Context do
 
   def get_permission_by(roles) do
     from(p in Permission,
-      join: r in Resource, on: p.resource_id == r.id,
+      join: r in Resource,
+      on: p.resource_id == r.id,
       where: p.role_id in ^roles,
       select: %{
         permission: p.permission,
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> repo().all
+    )
+    |> repo().all
   end
+
   def get_permission_by(res_id, roles) do
     from(p in Permission,
       where: p.resource_id == ^res_id,
@@ -350,7 +364,8 @@ defmodule SecureX.Context do
         resource_id: p.resource_id,
         role_id: p.role_id
       }
-    ) |> repo().one
+    )
+    |> repo().one
   end
 
   @doc """
@@ -427,7 +442,7 @@ defmodule SecureX.Context do
       [%UserRole{}, ...]
 
   """
-  @spec preload_user_roles(%UserRole{}) :: %UserRole{}
+  @spec preload_user_roles(struct()) :: struct()
   def preload_user_roles(data), do: repo().preload(data, [:role, :user])
 
   def list_user_roles do
@@ -469,6 +484,7 @@ defmodule SecureX.Context do
     )
     |> repo().all
   end
+
   def get_user_roles_by_user_id(user_id) do
     from(ur in UserRole,
       where: ur.user_id == ^user_id,

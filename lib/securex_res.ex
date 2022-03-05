@@ -1,5 +1,5 @@
 defmodule SecureX.Res do
-  alias SecureXWeb.{ ResourceController }
+  alias SecureXWeb.{ResourceController}
 
   @moduledoc """
   Contains CRUD For Resources.
@@ -19,9 +19,8 @@ defmodule SecureX.Res do
       %Resource{
         id: "users",
         name: "Users"
-      },
-      ...
-    ]
+      }
+      ]
   """
   @spec list() :: nonempty_list()
   def list() do
@@ -32,7 +31,7 @@ defmodule SecureX.Res do
   end
 
   @doc """
-  Get a Resource,
+  Get a Resource.
 
   ## Examples
 
@@ -51,7 +50,7 @@ defmodule SecureX.Res do
   end
 
   @doc """
-  Add a Resource. You can send either `Atom Map` or `String Map` to add Resource.
+  Add a Resource. You can send either `Atom Map` or `String Map` to add a Resource.
 
   ## Examples
 
@@ -71,7 +70,7 @@ defmodule SecureX.Res do
 
   @doc """
   Update a Resource. You can update any resource along with its permissions.
-  You can send either `Atom Map` or `String Map` to update Role. It will automatically
+  You can send either `Atom Map` or `String Map` to update a Role. It will automatically
   update `resource_id` in `Permissions` table.
 
   ## Examples

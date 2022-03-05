@@ -13,45 +13,38 @@
       <excludeFolder url="file://$MODULE_DIR$/deps" />
       <excludeFolder url="file://$MODULE_DIR$/doc" />
       <excludeFolder url="file://$MODULE_DIR$/logs" />
-      <excludeFolder url="file://$MODULE_DIR$/.idea" />
-      <excludeFolder url="file://$MODULE_DIR$/_build" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/earmark_parser" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/makeup" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/nimble_parsec" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/file_system" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/gettext" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/bunt" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/connection" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ranch" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/credo" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/db_connection" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/jason" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/decimal" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/telemetry" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/phoenix_pubsub" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/makeup_elixir" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/cowlib" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/makeup_erlang" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/cowboy_telemetry" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ex_doc" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/postgrex" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/cowboy" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto_sql" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/phoenix_html" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/phoenix_view" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/plug_crypto" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/plug_cowboy" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/phoenix" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/plug" />
     </content>
-    <orderEntry type="jdk" jdkName="Elixir 1.13.0-rc.0-otp-23" jdkType="Elixir SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="ecto_sql" level="project" />
-    <orderEntry type="library" exported="" name="ecto" level="project" />
-    <orderEntry type="library" name="cowboy" level="project" />
-    <orderEntry type="library" name="plug_cowboy" level="project" />
-    <orderEntry type="library" name="phoenix" level="project" />
-    <orderEntry type="library" name="postgrex" level="project" />
-    <orderEntry type="library" name="gettext" level="project" />
-    <orderEntry type="library" name="cowboy_telemetry" level="project" />
-    <orderEntry type="library" name="db_connection" level="project" />
-    <orderEntry type="library" name="phoenix_view" level="project" />
-    <orderEntry type="library" name="plug_crypto" level="project" />
-    <orderEntry type="library" name="cowlib" level="project" />
-    <orderEntry type="library" name="decimal" level="project" />
-    <orderEntry type="library" name="mime" level="project" />
-    <orderEntry type="library" name="ranch" level="project" />
-    <orderEntry type="library" name="telemetry" level="project" />
-    <orderEntry type="library" name="connection" level="project" />
-    <orderEntry type="library" name="plug" level="project" />
-    <orderEntry type="library" name="phoenix_pubsub" level="project" />
-    <orderEntry type="library" name="myxql" level="project" />
-    <orderEntry type="library" name="tds" level="project" />
-    <orderEntry type="library" name="jason" level="project" />
-    <orderEntry type="library" name="ex_doc" level="project" />
-    <orderEntry type="library" name="benchee" level="project" />
-    <orderEntry type="library" name="benchee_json" level="project" />
-    <orderEntry type="library" name="hackney" level="project" />
-    <orderEntry type="library" name="kadabra" level="project" />
-    <orderEntry type="library" name="x509" level="project" />
-    <orderEntry type="library" name="telemetry_poller" level="project" />
-    <orderEntry type="library" name="telemetry_metrics" level="project" />
-    <orderEntry type="library" name="phoenix_html" level="project" />
-    <orderEntry type="library" name="phx_new" level="project" />
-    <orderEntry type="library" name="websocket_client" level="project" />
-    <orderEntry type="library" name="esbuild" level="project" />
     <orderEntry type="library" name="ecto_sql" level="project" />
     <orderEntry type="library" name="ecto" level="project" />
     <orderEntry type="library" name="cowboy" level="project" />
@@ -61,13 +54,35 @@
     <orderEntry type="library" name="postgrex" level="project" />
     <orderEntry type="library" name="gettext" level="project" />
     <orderEntry type="library" name="jason" level="project" />
-    <orderEntry type="library" name="dialyxir" level="project" />
-    <orderEntry type="library" name="erlex" level="project" />
+    <orderEntry type="library" name="ex_doc" level="project" />
     <orderEntry type="library" name="credo" level="project" />
-    <orderEntry type="library" name="excoveralls" level="project" />
+    <orderEntry type="library" name="telemetry" level="project" />
+    <orderEntry type="library" name="db_connection" level="project" />
+    <orderEntry type="library" name="benchee" level="project" />
+    <orderEntry type="library" name="benchee_json" level="project" />
+    <orderEntry type="library" name="decimal" level="project" />
+    <orderEntry type="library" name="plug" level="project" />
+    <orderEntry type="library" name="cowboy_telemetry" level="project" />
+    <orderEntry type="library" name="hackney" level="project" />
+    <orderEntry type="library" name="kadabra" level="project" />
+    <orderEntry type="library" name="x509" level="project" />
+    <orderEntry type="library" name="plug_crypto" level="project" />
+    <orderEntry type="library" name="phoenix_pubsub" level="project" />
+    <orderEntry type="library" name="phoenix_view" level="project" />
+    <orderEntry type="library" name="telemetry_poller" level="project" />
+    <orderEntry type="library" name="telemetry_metrics" level="project" />
+    <orderEntry type="library" name="phx_new" level="project" />
+    <orderEntry type="library" name="websocket_client" level="project" />
+    <orderEntry type="library" name="esbuild" level="project" />
+    <orderEntry type="library" name="connection" level="project" />
     <orderEntry type="library" name="earmark_parser" level="project" />
     <orderEntry type="library" name="makeup_elixir" level="project" />
     <orderEntry type="library" name="makeup_erlang" level="project" />
+    <orderEntry type="library" name="excoveralls" level="project" />
+    <orderEntry type="library" name="file_system" level="project" />
+    <orderEntry type="library" name="bunt" level="project" />
+    <orderEntry type="library" name="inch_ex" level="project" />
+    <orderEntry type="library" name="mime" level="project" />
     <orderEntry type="library" name="makeup" level="project" />
     <orderEntry type="library" name="nimble_parsec" level="project" />
     <orderEntry type="library" name="unicode_set" level="project" />

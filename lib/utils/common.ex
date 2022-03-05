@@ -14,6 +14,7 @@ defmodule SecureX.Common do
       end
     end
   end
+
   def keys_to_atoms(string_key_list) when is_list(string_key_list) do
     string_key_list
     |> Enum.map(&keys_to_atoms/1)

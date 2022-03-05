@@ -3,8 +3,7 @@ defmodule SecureXWeb.ResourceController do
 
   import Macro, only: [camelize: 1]
   use SecureXWeb, :controller
-  alias SecureX.Common
-  alias SecureX.Context
+  alias SecureX.{Common,Context}
 
   @doc """
   Get list of Resources,
@@ -45,9 +44,10 @@ defmodule SecureXWeb.ResourceController do
     case params do
       %{res: res_id} -> get_resource_sage(res_id)
       %{"res" => res_id} -> get_resource_sage(res_id)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def get(_), do: {:error, :bad_input}
 
   defp get_resource_sage(params) do
@@ -72,9 +72,10 @@ defmodule SecureXWeb.ResourceController do
     case params do
       %{res: res} -> create_res_sage(res)
       %{"res" => res} -> create_res_sage(res)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def create(_), do: {:error, :bad_input}
 
   defp create_res_sage(res) do
@@ -88,10 +89,13 @@ defmodule SecureXWeb.ResourceController do
   end
 
   defp create_res(res) do
-    name = res |> String.trim
-    res_id = name
-           |> String.downcase
-           |> String.replace(" ", "_")
+    name = res |> String.trim()
+
+    res_id =
+      name
+      |> String.downcase()
+      |> String.replace(" ", "_")
+
     Context.create_resource(%{id: res_id, name: camelize(name)})
   end
 
@@ -108,13 +112,18 @@ defmodule SecureXWeb.ResourceController do
   @spec update(map()) :: struct()
   def update(params) when params !== %{} do
     case params do
-      %{id: res_id} -> update_res_sage(res_id, params)
+      %{id: res_id} ->
+        update_res_sage(res_id, params)
+
       %{"id" => res_id} ->
         params = Common.keys_to_atoms(params)
         update_res_sage(res_id, params)
-      _-> {:error, :bad_input}
+
+      _ ->
+        {:error, :bad_input}
     end
   end
+
   def update(_), do: {:error, :bad_input}
 
   defp update_res_sage(res_id, params) do
@@ -128,16 +137,26 @@ defmodule SecureXWeb.ResourceController do
   end
 
   defp update_res(prev_res, %{res: new_res}) do
-    name = new_res |> String.trim
-    updated_res = name
-                   |> String.downcase
-                   |> String.replace(" ", "_")
-    if(prev_res.id !== updated_res) do
+    name = new_res |> String.trim()
+
+    updated_res =
+      name
+      |> String.downcase()
+      |> String.replace(" ", "_")
+
+    if prev_res.id !== updated_res do
       {:ok, new_res} = Context.create_resource(%{id: updated_res, name: camelize(name)})
+
       case Context.get_permissions_by_res_id(prev_res.id) do
-        [] -> :nothing
-        permissions -> Enum.map(permissions, fn per -> Context.update_permission(per, %{resource_id: updated_res}) end)
+        [] ->
+          :nothing
+
+        permissions ->
+          Enum.each(permissions, fn per ->
+            Context.update_permission(per, %{resource_id: updated_res})
+          end)
       end
+
       Context.delete_resource(prev_res)
       {:ok, Map.merge(new_res, %{permissions: :successfully_updated_permissions})}
     else
@@ -162,14 +181,15 @@ defmodule SecureXWeb.ResourceController do
     case params do
       %{res: res_id} -> delete_res_sage(res_id)
       %{"res" => res_id} -> delete_res_sage(res_id)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def delete(_), do: {:error, :bad_input}
 
   defp delete_res_sage(res_id) do
     with %{__struct__: _} = res <- Context.get_resource(res_id),
-         {:ok, permission} <- remove_permissions(res),
+         {:ok, permission} <- delete_permissions(res),
          {:ok, res} <- delete_res(res) do
       {:ok, Map.merge(res, %{permissions: permission})}
     else
@@ -178,15 +198,18 @@ defmodule SecureXWeb.ResourceController do
     end
   end
 
-  defp remove_permissions(%{id: res_id}) do
+  defp delete_permissions(%{id: res_id}) do
     case Context.get_permissions_by_res_id(res_id) do
-      [] -> {:ok, :already_removed}
+      [] ->
+        {:ok, :already_removed}
+
       permissions ->
-        Enum.map(permissions, fn per -> Context.delete_permission(per) end)
+        Enum.each(permissions, fn per -> Context.delete_permission(per) end)
         {:ok, :successfully_removed_permissions}
     end
   end
-  defp remove_permissions(_), do: {:ok, :invalid_resource_id}
+
+  defp delete_permissions(_), do: {:ok, :invalid_resource_id}
 
   defp delete_res(res) do
     case Context.delete_resource(res) do

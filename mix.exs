@@ -7,7 +7,8 @@ defmodule SecureX.MixProject do
       version: "0.3.8",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
-      description: "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
+      description:
+        "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -20,7 +21,8 @@ defmodule SecureX.MixProject do
       source_url: "https://github.com/DevWasi/secruex",
       homepage_url: "https://github.com/DevWasi/secruex",
       docs: [
-        main: "SecureX", # The main page in the docs
+        # The main page in the docs
+        main: "SecureX",
         extras: ["README.md"],
         api_reference: false
       ]
@@ -39,7 +41,8 @@ defmodule SecureX.MixProject do
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
-      description: "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions."
+      description:
+        "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions."
     ]
   end
 
@@ -69,6 +72,7 @@ defmodule SecureX.MixProject do
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
+
   defp aliases do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],

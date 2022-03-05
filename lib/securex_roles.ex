@@ -1,5 +1,5 @@
 defmodule SecureX.Roles do
-  alias SecureXWeb.{ RoleController }
+  alias SecureXWeb.{RoleController}
 
   @moduledoc """
   Contains CRUD For Roles.
@@ -16,14 +16,12 @@ defmodule SecureX.Roles do
         id: "super_admin",
         name: "Super Admin",
         permission: [
-          ...
           %{resource_id: "users", permission: -1, role_id: "super_admin"},
           %{resource_id: "employees", permission: -1, role_id: "super_admin"},
           %{resource_id: "customer", permission: -1, role_id: "super_admin"}
-          ...
         ]
       }
-    ]
+     ]
   """
   @spec list() :: nonempty_list()
   def list() do
@@ -43,11 +41,9 @@ defmodule SecureX.Roles do
         id: "super_admin",
         name: "Super Admin",
         permission: [
-          ...
           %{resource_id: "users", permission: -1, role_id: "super_admin"},
           %{resource_id: "employees", permission: -1, role_id: "super_admin"},
           %{resource_id: "customer", permission: -1, role_id: "super_admin"}
-          ...
         ]
       }
   """
@@ -60,8 +56,8 @@ defmodule SecureX.Roles do
   end
 
   @doc """
-  Add a Role. You can send either `Atom Map` or `String Map` to add Role. If you have existing resources,
-  it will create default permissions against this role
+  Add a Role. You can send either `Atom Map` or `String Map` to add a Role. If you have existing resources,
+  it will create default permissions against this role.
 
   ## Examples
 
@@ -89,7 +85,7 @@ defmodule SecureX.Roles do
 
   @doc """
   Update a Role. You can update any role along with its permissions if you want, if you pass `:permissions`
-  in your params. You can send either `Atom Map` or `String Map` to update Role. It will automatically
+  in your params. You can send either `Atom Map` or `String Map` to update  sRole. It will automatically
   update that `role_id` in `UserRoles` and `Permissions` table, if you intend to update any role.
 
   ## Examples

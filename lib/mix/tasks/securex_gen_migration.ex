@@ -1,43 +1,54 @@
 if Code.ensure_loaded?(Ecto) do
-  defmodule Mix.Tasks.SecureX.Gen.Migration do
+  defmodule Mix.Tasks.Securex.Gen.Migration do
     @moduledoc "The SecureX mix task to create migrations into your project `priv/repo/migrations` folder"
     use Mix.Task
 
     import Macro, only: [camelize: 1, underscore: 1]
-    import Mix.Generator
-    import Mix.Ecto
+    import Mix.{Generator, Ecto}
     import SecureX.Migration
 
     def run(args) do
       repos = parse_repo(args)
+
       Enum.each(repos, fn repo ->
         ensure_repo(repo, args)
         path = Path.relative_to(migrations_path(repo), Mix.Project.app_path())
         create_directory(path)
-        migrations = [role: "create_table_roles", res: "create_table_resources", permission: "create_table_permission", user_roles: "create_table_user_roles"]
+
+        migrations = [
+          role: "create_table_roles",
+          res: "create_table_resources",
+          permission: "create_table_permission",
+          user_roles: "create_table_user_roles"
+        ]
 
         Enum.reduce(migrations, 1, fn {key, value}, acc ->
           time = timestamp(acc)
+
           content =
             [mod: Module.concat([repo, Migrations, camelize(value)])]
             |> (fn f -> f ++ [check: key] end).()
             |> migration_template
             |> format_string!
-          file = Path.join(path, "#{time}_#{underscore(value)}.exs")
-                 |> create_file(content)
+
+          file =
+            Path.join(path, "#{time}_#{underscore(value)}.exs")
+            |> create_file(content)
+
           if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
             Mix.Task.run("ecto.migrate", [repo])
           end
+
           acc + 1
         end)
-      end
-      )
+      end)
     end
 
     defp timestamp(acc) do
       {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
       "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss + acc)}"
     end
+
     defp pad(i) when i < 10, do: <<?0, ?0 + i>>
     defp pad(i), do: to_string(i)
 

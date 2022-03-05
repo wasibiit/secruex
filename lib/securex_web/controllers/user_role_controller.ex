@@ -2,8 +2,7 @@ defmodule SecureXWeb.UserRoleController do
   @moduledoc false
 
   use SecureXWeb, :controller
-  alias SecureX.Common
-  alias SecureX.Context
+  alias SecureX.{Common,Context}
 
   @doc """
   Get list of UserRoles by `user_id`,
@@ -19,9 +18,10 @@ defmodule SecureXWeb.UserRoleController do
     case params do
       %{user_id: user_id} -> get_user_role_sage(user_id)
       %{"user_id" => user_id} -> get_user_role_sage(user_id)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def get(_), do: {:error, :bad_input}
 
   defp get_user_role_sage(params) do
@@ -46,13 +46,18 @@ defmodule SecureXWeb.UserRoleController do
   @spec create(map()) :: struct()
   def create(params) when params !== %{} do
     case params do
-      %{user_id: _, role_id: _} -> create_user_role_sage(params)
+      %{user_id: _, role_id: _} ->
+        create_user_role_sage(params)
+
       %{"user_id" => _, "role_id" => _} ->
         params = Common.keys_to_atoms(params)
         create_user_role_sage(params)
-      _-> {:error, :bad_input}
+
+      _ ->
+        {:error, :bad_input}
     end
   end
+
   def create(_), do: {:error, :bad_input}
 
   defp create_user_role_sage(params) do
@@ -82,9 +87,10 @@ defmodule SecureXWeb.UserRoleController do
     case params do
       %{id: user_role_id} -> delete_user_role_sage(user_role_id)
       %{"id" => user_role_id} -> delete_user_role_sage(user_role_id)
-      _-> {:error, :bad_input}
+      _ -> {:error, :bad_input}
     end
   end
+
   def delete(_), do: {:error, :bad_input}
 
   defp delete_user_role_sage(user_role_id) do

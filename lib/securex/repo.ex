@@ -1,4 +1,4 @@
-  defmodule SecureX.Repo do
+defmodule SecureX.Repo do
   @moduledoc false
 
   # Dynamic Repo Of Current App

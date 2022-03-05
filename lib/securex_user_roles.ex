@@ -1,12 +1,12 @@
 defmodule SecureX.UserRoles do
-  alias SecureXWeb.{ UserRoleController }
+  alias SecureXWeb.{UserRoleController}
 
   @moduledoc """
   Contains CRUD For UserRoles.
   """
 
   @doc """
-  Get list Of UserRoles by `user_id`,
+  Get list Of UserRoles by `user_id`.
 
   ## Examples
 
@@ -31,7 +31,7 @@ defmodule SecureX.UserRoles do
   end
 
   @doc """
-  Add an UserRole. You can send either `Atom Map` or `String Map` to add UserRole.
+  Add an UserRole. You can send either `Atom Map` or `String Map` to add an UserRole.
 
   ## Examples
 
