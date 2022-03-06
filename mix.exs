@@ -4,18 +4,16 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "0.3.8",
+      version: "1.0.0",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       description:
         "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
       links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
-      elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
-      aliases: aliases(),
       deps: deps(),
       name: "SecureX",
       source_url: "https://github.com/DevWasi/secruex",
@@ -45,7 +43,6 @@ defmodule SecureX.MixProject do
         "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions."
     ]
   end
-
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
@@ -53,31 +50,13 @@ defmodule SecureX.MixProject do
       extra_applications: [:logger, :runtime_tools]
     ]
   end
-
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
-
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sql, "~> 3.7"},
-      {:ecto, "~> 3.7"},
-      {:cowboy, "~> 2.9"},
-      {:plug_cowboy, "~> 2.2"},
-      {:phoenix, "~> 1.5"},
-      {:phoenix_html, "~>  3.1.0"},
-      {:postgrex, ">= 0.0.0"},
-      {:gettext, "~> 0.18.2"},
-      {:jason, "~> 1.2"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
-    ]
-  end
-
-  defp aliases do
-    [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:gettext, "~> 0.19.1"},
+      {:phoenix, "~> 1.6"},
+      {:jason, "~> 1.3"},
+      {:ecto_sql, "~> 3.7"}
     ]
   end
 end

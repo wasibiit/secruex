@@ -89,5 +89,7 @@
     <orderEntry type="library" name="benchee_markdown" level="project" />
     <orderEntry type="library" name="assert_value" level="project" />
     <orderEntry type="library" name="stream_data" level="project" />
+    <orderEntry type="library" name="securex" level="project" />
+    <orderEntry type="library" name="floki" level="project" />
   </component>
 </module>
