@@ -42,11 +42,11 @@ defmodule SecureXWeb.PermissionController do
   def create(params) when params !== %{} do
     case params do
       %{resource_id: _, role_id: _} ->
-        create_per_sage(params)
+        create_per(params)
 
       %{"resource_id" => _, "role_id" => _} ->
         params = Common.keys_to_atoms(params)
-        create_per_sage(params)
+        create_per(params)
 
       _ ->
         {:error, :bad_input}
@@ -55,7 +55,7 @@ defmodule SecureXWeb.PermissionController do
 
   def create(_), do: {:error, :bad_input}
 
-  defp create_per_sage(params) do
+  defp create_per(params) do
     with nil <- Context.get_permission(params.resource_id, params.role_id),
          {:ok, per} <- Context.create_permission(params) do
       {:ok, per}
@@ -82,11 +82,11 @@ defmodule SecureXWeb.PermissionController do
   def update(params) when params !== %{} do
     case params do
       %{id: per_id} ->
-        update_per_sage(per_id, params)
+        update_per(per_id, params)
 
       %{"id" => per_id} ->
         params = Common.keys_to_atoms(params)
-        update_per_sage(per_id, params)
+        update_per(per_id, params)
 
       _ ->
         {:error, :bad_input}
@@ -95,7 +95,7 @@ defmodule SecureXWeb.PermissionController do
 
   def update(_), do: {:error, :bad_input}
 
-  defp update_per_sage(per_id, params) do
+  defp update_per(per_id, params) do
     with %{__struct__: _} = per <- Context.get_permission(per_id),
          {:ok, new_per} <- Context.update_permission(per, Map.delete(params, :id)) do
       {:ok, new_per}
@@ -121,15 +121,15 @@ defmodule SecureXWeb.PermissionController do
   @spec delete(map()) :: struct()
   def delete(params) when params !== %{} do
     case params do
-      %{id: per_id} -> delete_per_sage(per_id)
-      %{"id" => per_id} -> delete_per_sage(per_id)
+      %{id: per_id} -> delete_per(per_id)
+      %{"id" => per_id} -> delete_per(per_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def delete(_), do: {:error, :bad_input}
 
-  defp delete_per_sage(per_id) do
+  defp delete_per(per_id) do
     with %{__struct__: _} = per <- Context.get_permission(per_id),
          {:ok, per} <- Context.delete_permission(per) do
       {:ok, per}

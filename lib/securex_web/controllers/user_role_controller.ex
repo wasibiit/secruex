@@ -16,15 +16,15 @@ defmodule SecureXWeb.UserRoleController do
   @spec get(map()) :: struct()
   def get(params) when params !== %{} do
     case params do
-      %{user_id: user_id} -> get_user_role_sage(user_id)
-      %{"user_id" => user_id} -> get_user_role_sage(user_id)
+      %{user_id: user_id} -> get_user_role(user_id)
+      %{"user_id" => user_id} -> get_user_role(user_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def get(_), do: {:error, :bad_input}
 
-  defp get_user_role_sage(params) do
+  defp get_user_role(params) do
     case Context.get_user_roles_by_user_id(params) do
       nil -> {:error, :no_user_roles_found}
       roles -> {:ok, roles}
@@ -47,11 +47,11 @@ defmodule SecureXWeb.UserRoleController do
   def create(params) when params !== %{} do
     case params do
       %{user_id: _, role_id: _} ->
-        create_user_role_sage(params)
+        create_user_role(params)
 
       %{"user_id" => _, "role_id" => _} ->
         params = Common.keys_to_atoms(params)
-        create_user_role_sage(params)
+        create_user_role(params)
 
       _ ->
         {:error, :bad_input}
@@ -60,7 +60,7 @@ defmodule SecureXWeb.UserRoleController do
 
   def create(_), do: {:error, :bad_input}
 
-  defp create_user_role_sage(params) do
+  defp create_user_role(params) do
     with nil <- Context.get_user_role_by(params.user_id, params.role_id),
          {:ok, user_role} <- Context.create_user_role(params) do
       {:ok, user_role}
@@ -85,15 +85,15 @@ defmodule SecureXWeb.UserRoleController do
   @spec delete(map()) :: struct()
   def delete(params) when params !== %{} do
     case params do
-      %{id: user_role_id} -> delete_user_role_sage(user_role_id)
-      %{"id" => user_role_id} -> delete_user_role_sage(user_role_id)
+      %{id: user_role_id} -> delete_user_role(user_role_id)
+      %{"id" => user_role_id} -> delete_user_role(user_role_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def delete(_), do: {:error, :bad_input}
 
-  defp delete_user_role_sage(user_role_id) do
+  defp delete_user_role(user_role_id) do
     with %{__struct__: _} = user_role <- Context.get_user_role(user_role_id),
          {:ok, user_role} <- Context.delete_user_role(user_role) do
       {:ok, user_role}

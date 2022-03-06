@@ -51,15 +51,15 @@ defmodule SecureXWeb.RoleController do
   @spec get(map()) :: struct()
   def get(params) when params !== %{} do
     case params do
-      %{role: role} -> get_role_sage(role)
-      %{"role" => role} -> get_role_sage(role)
+      %{role: role} -> get_role(role)
+      %{"role" => role} -> get_role(role)
       _ -> {:error, :bad_input}
     end
   end
 
   def get(_), do: {:error, :bad_input}
 
-  defp get_role_sage(params) do
+  defp get_role(params) do
     case Context.get_role(params) do
       nil -> {:error, :no_role_found}
       role -> {:ok, role}
@@ -81,15 +81,15 @@ defmodule SecureXWeb.RoleController do
   @spec create(map()) :: struct()
   def create(params) when params !== %{} do
     case params do
-      %{role: role} -> create_role_sage(role)
-      %{"role" => role} -> create_role_sage(role)
+      %{role: role} -> create_role_checks(role)
+      %{"role" => role} -> create_role_checks(role)
       _ -> {:error, :bad_input}
     end
   end
 
   def create(_), do: {:error, :bad_input}
 
-  defp create_role_sage(role) do
+  defp create_role_checks(role) do
     with nil <- Context.get_role_by(role),
          {:ok, new_role} <- create_role(role),
          {:ok, permissions} <- create_permissions(role) do
@@ -153,11 +153,11 @@ defmodule SecureXWeb.RoleController do
   def update(params) when params !== %{} do
     case params do
       %{id: role_id, role: _} ->
-        update_role_sage(role_id, params)
+        update_role_checks(role_id, params)
 
       %{"id" => role_id, "role" => _} ->
         params = Common.keys_to_atoms(params)
-        update_role_sage(role_id, params)
+        update_role_checks(role_id, params)
 
       _ ->
         {:error, :bad_input}
@@ -166,7 +166,7 @@ defmodule SecureXWeb.RoleController do
 
   def update(_), do: {:error, :bad_input}
 
-  defp update_role_sage(role_id, params) do
+  defp update_role_checks(role_id, params) do
     with %{__struct__: _} = prev_role <- Context.get_role_by(role_id),
          {:ok, new_role} <- update_role(prev_role, params),
          {:ok, new_role} <- update_permissions(new_role, params) do
@@ -264,15 +264,15 @@ defmodule SecureXWeb.RoleController do
   @spec delete(map()) :: struct()
   def delete(params) when params !== %{} do
     case params do
-      %{id: role_id} -> delete_role_sage(role_id)
-      %{"id" => role_id} -> delete_role_sage(role_id)
+      %{id: role_id} -> delete_role_checks(role_id)
+      %{"id" => role_id} -> delete_role_checks(role_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def delete(_), do: {:error, :bad_input}
 
-  defp delete_role_sage(role_id) do
+  defp delete_role_checks(role_id) do
     with %{__struct__: _} = role <- Context.get_role_by(role_id),
          {:ok, permission} <- delete_permissions(role),
          {:ok, user_role} <- delete_user_roles(role),

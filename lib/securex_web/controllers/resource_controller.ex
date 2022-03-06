@@ -42,15 +42,15 @@ defmodule SecureXWeb.ResourceController do
   @spec get(map()) :: struct()
   def get(params) when params !== %{} do
     case params do
-      %{res: res_id} -> get_resource_sage(res_id)
-      %{"res" => res_id} -> get_resource_sage(res_id)
+      %{res: res_id} -> get_resource(res_id)
+      %{"res" => res_id} -> get_resource(res_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def get(_), do: {:error, :bad_input}
 
-  defp get_resource_sage(params) do
+  defp get_resource(params) do
     case Context.get_resource(params) do
       nil -> {:error, :no_role_found}
       res -> {:ok, res}
@@ -70,15 +70,15 @@ defmodule SecureXWeb.ResourceController do
   @spec create(map()) :: struct()
   def create(params) when params !== %{} do
     case params do
-      %{res: res} -> create_res_sage(res)
-      %{"res" => res} -> create_res_sage(res)
+      %{res: res} -> create_res_checks(res)
+      %{"res" => res} -> create_res_checks(res)
       _ -> {:error, :bad_input}
     end
   end
 
   def create(_), do: {:error, :bad_input}
 
-  defp create_res_sage(res) do
+  defp create_res_checks(res) do
     with nil <- Context.get_resource_by(res),
          {:ok, res} <- create_res(res) do
       {:ok, res}
@@ -113,11 +113,11 @@ defmodule SecureXWeb.ResourceController do
   def update(params) when params !== %{} do
     case params do
       %{id: res_id} ->
-        update_res_sage(res_id, params)
+        update_res_checks(res_id, params)
 
       %{"id" => res_id} ->
         params = Common.keys_to_atoms(params)
-        update_res_sage(res_id, params)
+        update_res_checks(res_id, params)
 
       _ ->
         {:error, :bad_input}
@@ -126,7 +126,7 @@ defmodule SecureXWeb.ResourceController do
 
   def update(_), do: {:error, :bad_input}
 
-  defp update_res_sage(res_id, params) do
+  defp update_res_checks(res_id, params) do
     with %{__struct__: _} = prev_res <- Context.get_resource(res_id),
          {:ok, new_res} <- update_res(prev_res, params) do
       {:ok, new_res}
@@ -179,15 +179,15 @@ defmodule SecureXWeb.ResourceController do
   @spec delete(map()) :: struct()
   def delete(params) when params !== %{} do
     case params do
-      %{res: res_id} -> delete_res_sage(res_id)
-      %{"res" => res_id} -> delete_res_sage(res_id)
+      %{res: res_id} -> delete_res_checks(res_id)
+      %{"res" => res_id} -> delete_res_checks(res_id)
       _ -> {:error, :bad_input}
     end
   end
 
   def delete(_), do: {:error, :bad_input}
 
-  defp delete_res_sage(res_id) do
+  defp delete_res_checks(res_id) do
     with %{__struct__: _} = res <- Context.get_resource(res_id),
          {:ok, permission} <- delete_permissions(res),
          {:ok, res} <- delete_res(res) do
