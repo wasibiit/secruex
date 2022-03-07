@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/github/wasitanbits/secruex.svg?style=svg)](https://app.circleci.com/pipelines/github/wasitanbits/secruex?branch=master)
+[![CircleCI](https://circleci.com/github/wasitanbits/securex.svg?branch=master)](https://app.circleci.com/pipelines/github/wasitanbits/secruex)
 [![License](https://img.shields.io/github/license/wasitanbits/secruex)](https://img.shields.io/github/license/wasitanbits/secruex)
 [![License](https://img.shields.io/hexpm/dt/securex.svg)](https://img.shields.io/hexpm/dt/securex.svg)
 
