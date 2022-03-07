@@ -1,4 +1,4 @@
-[![Build status](https://api.cirrus-ci.com/github/elixir-lang/elixir.svg?branch=main)](https://cirrus-ci.com/github/elixir-lang/elixir)
+[![CircleCI](https://circleci.com/github/wasitanbits/secruex/style=shield)](https://app.circleci.com/pipelines/github/wasitanbits/secruex?branch=master)
 [![License](https://img.shields.io/github/license/wasitanbits/secruex)](https://img.shields.io/github/license/wasitanbits/secruex)
 [![License](https://img.shields.io/hexpm/dt/securex.svg)](https://img.shields.io/hexpm/dt/securex.svg)
 
