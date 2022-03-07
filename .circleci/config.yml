@@ -25,6 +25,3 @@ jobs:
 
       # specify any bash command here prefixed with `run: 
       - run: mix local.hex --force
-      - run: y`
-      - run: mix deps.get
-      - run: mix format
