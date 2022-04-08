@@ -2,7 +2,7 @@ defmodule SecureXWeb.UserRoleController do
   @moduledoc false
 
   use SecureXWeb, :controller
-  alias SecureX.{Common,Context}
+  alias SecureX.Context
 
   @doc """
   Get list of UserRoles by `user_id`,
@@ -13,7 +13,7 @@ defmodule SecureXWeb.UserRoleController do
       ["owner", "admin", ...]
 
   """
-  @spec get(map()) :: struct()
+  @spec get(map()) :: tuple()
   def get(params) when params !== %{} do
     case params do
       %{user_id: user_id} -> get_user_role(user_id)
@@ -43,14 +43,14 @@ defmodule SecureXWeb.UserRoleController do
         role_id: "super_admin"
       }
   """
-  @spec create(map()) :: struct()
+  @spec create(map()) :: tuple()
   def create(params) when params !== %{} do
     case params do
       %{user_id: _, role_id: _} ->
         create_user_role(params)
 
       %{"user_id" => _, "role_id" => _} ->
-        params = Common.keys_to_atoms(params)
+        params = keys_to_atoms(params)
         create_user_role(params)
 
       _ ->
@@ -82,7 +82,7 @@ defmodule SecureXWeb.UserRoleController do
         role_id: "admin"
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) when params !== %{} do
     case params do
       %{id: user_role_id} -> delete_user_role(user_role_id)

@@ -1,23 +1,14 @@
 defmodule SecureX.Permission do
   @moduledoc false
-
-  use Ecto.Schema
-  import Ecto.Changeset
-
-  @primary_key if Application.get_env(:securex, :type) === :binary_id,
-                 do: {:id, :binary_id, autogenerate: true},
-                 else: {:id, :id, autogenerate: true}
-  @foreign_key_type if Application.get_env(:securex, :type) === :binary_id,
-                      do: Ecto.UUID,
-                      else: :id
+  use SecureX.Schema
 
   schema "permissions" do
-    field(:permission, :integer)
+    field :permission, :integer
 
-    belongs_to(:resource, SecureX.Resource, type: :string)
-    belongs_to(:role, SecureX.Role, type: :string)
+    belongs_to :resource, SecureX.Resource, type: :string
+    belongs_to :role, SecureX.Role, type: :string
 
-    timestamps()
+    timestamp()
   end
 
   @doc false

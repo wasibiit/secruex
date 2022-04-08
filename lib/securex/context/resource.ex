@@ -1,15 +1,13 @@
 defmodule SecureX.Resource do
   @moduledoc false
-
-  use Ecto.Schema
-  import Ecto.Changeset
+  use SecureX.Schema
 
   @primary_key false
   schema "resources" do
-    field(:id, :string, primary_key: true)
-    field(:name, :string)
+    field :id, :string, primary_key: true
+    field :name, :string
 
-    timestamps()
+    timestamp()
   end
 
   @doc false

@@ -1,9 +1,8 @@
 defmodule SecureXWeb.ResourceController do
   @moduledoc false
 
-  import Macro, only: [camelize: 1]
   use SecureXWeb, :controller
-  alias SecureX.{Common,Context}
+  alias SecureX.Context
 
   @doc """
   Get list of Resources,
@@ -109,14 +108,14 @@ defmodule SecureXWeb.ResourceController do
         name: "Person Organization"
       }
   """
-  @spec update(map()) :: struct()
+  @spec update(map()) :: tuple()
   def update(params) when params !== %{} do
     case params do
       %{id: res_id} ->
         update_res_checks(res_id, params)
 
       %{"id" => res_id} ->
-        params = Common.keys_to_atoms(params)
+        params = keys_to_atoms(params)
         update_res_checks(res_id, params)
 
       _ ->
@@ -176,7 +175,7 @@ defmodule SecureXWeb.ResourceController do
         permissions: :successfully_removed_permissions
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) when params !== %{} do
     case params do
       %{res: res_id} -> delete_res_checks(res_id)

@@ -31,13 +31,8 @@ if Code.ensure_loaded?(Ecto) do
             |> migration_template
             |> format_string!
 
-          file =
-            Path.join(path, "#{time}_#{underscore(value)}.exs")
-            |> create_file(content)
-
-          if open?(file) and Mix.shell().yes?("Do you want to run this migration?") do
-            Mix.Task.run("ecto.migrate", [repo])
-          end
+          Path.join(path, "#{time}_#{underscore(value)}.exs")
+          |> create_file(content)
 
           acc + 1
         end)

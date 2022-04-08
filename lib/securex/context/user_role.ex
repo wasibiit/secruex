@@ -1,21 +1,12 @@
 defmodule SecureX.UserRole do
   @moduledoc false
-
-  use Ecto.Schema
-  import Ecto.Changeset
-
-  @primary_key if Application.get_env(:securex, :type) === :binary_id,
-                 do: {:id, :binary_id, autogenerate: true},
-                 else: {:id, :id, autogenerate: true}
-  @foreign_key_type if Application.get_env(:securex, :type) === :binary_id,
-                      do: Ecto.UUID,
-                      else: :id
+  use SecureX.Schema
 
   schema "user_roles" do
-    belongs_to(:role, SecureX.Role, type: :string)
-    belongs_to(:user, Application.get_env(:securex, :schema))
+    belongs_to :role, SecureX.Role, type: :string
+    belongs_to :user, Application.get_env(:securex, :schema) || raise "Set SecureX Configuration"
 
-    timestamps()
+    timestamp()
   end
 
   @doc false

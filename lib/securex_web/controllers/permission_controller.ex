@@ -2,7 +2,7 @@ defmodule SecureXWeb.PermissionController do
   @moduledoc false
 
   use SecureXWeb, :controller
-  alias SecureX.{Common,Context}
+  alias SecureX.Context
 
   @doc """
   Get list of Permissions By Roles,
@@ -38,14 +38,14 @@ defmodule SecureXWeb.PermissionController do
         role_id: "super_admin"
       }
   """
-  @spec create(map()) :: struct()
+  @spec create(map()) :: tuple()
   def create(params) when params !== %{} do
     case params do
       %{resource_id: _, role_id: _} ->
         create_per(params)
 
       %{"resource_id" => _, "role_id" => _} ->
-        params = Common.keys_to_atoms(params)
+        params = keys_to_atoms(params)
         create_per(params)
 
       _ ->
@@ -78,14 +78,14 @@ defmodule SecureXWeb.PermissionController do
         role_id: "admin"
       }
   """
-  @spec update(map()) :: struct()
+  @spec update(map()) :: tuple()
   def update(params) when params !== %{} do
     case params do
       %{id: per_id} ->
         update_per(per_id, params)
 
       %{"id" => per_id} ->
-        params = Common.keys_to_atoms(params)
+        params = keys_to_atoms(params)
         update_per(per_id, params)
 
       _ ->
@@ -118,7 +118,7 @@ defmodule SecureXWeb.PermissionController do
         role_id: "admin"
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) when params !== %{} do
     case params do
       %{id: per_id} -> delete_per(per_id)
