@@ -52,11 +52,18 @@ defmodule SecureX.MixProject do
   end
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:gettext, "~> 0.19.1"},
-      {:phoenix, "~> 1.6"},
-      {:jason, "~> 1.3"},
-      {:ecto_sql, "~> 3.7"}
+     [
+       {:gettext, "~> 0.19.1"},
+       {:phoenix, "~> 1.6"},
+       {:jason, "~> 1.3"},
+       {:ecto_sql, "~> 3.7"},
+       {:sage, "~> 0.6.1"}
+     ],
+      [
+        {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+        {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false}
+      ]
     ]
+    |> Enum.concat()
   end
 end
