@@ -58,13 +58,6 @@ defmodule SecureXWeb.RoleController do
 
   def get(_), do: {:error, :bad_input}
 
-  defp get_role(params) do
-    case Context.get_role(params) do
-      nil -> {:error, :no_role_found}
-      role -> {:ok, role}
-    end
-  end
-
   @doc """
   Create a Role,
 
@@ -95,6 +88,13 @@ defmodule SecureXWeb.RoleController do
 
   defp get_role(_, %{role: role}),
   do: role |> trimmed_downcase |> Context.get_role_by() |> default_resp(mode: :reverse, msg: :alrady_exist)
+
+  defp get_role(params) do
+    case Context.get_role(params) do
+      nil -> {:error, :no_role_found}
+      role -> {:ok, role}
+    end
+  end
 
   defp create_role(_, %{role: role}) do
     name = role |> String.trim()
