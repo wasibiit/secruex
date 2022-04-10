@@ -35,6 +35,22 @@ defmodule SecureX.Helper do
   @spec default_resp(any(), Keyword.t()) :: tuple()
   def default_resp(result, opts \\ [])
 
+  def default_resp([], mode: :reverse, msg: msg), do: ok(msg)
+
+  def default_resp([], msg: err), do: err |> error()
+
+  def default_resp([], _), do: error()
+
+  def default_resp(result, mode: :reverse, msg: err) when is_list(result), do: err |> error()
+
+  def default_resp(result, _) when is_list(result), do: ok(result)
+
+  def default_resp({_, nil}, msg: err), do: err |> error()
+
+  def default_resp({_, nil}, _), do: error()
+
+  def default_resp({_, result}, _) when is_list(result), do: ok(result)
+
   def default_resp({:error, changeset}, _), do: changeset_error(changeset)
 
   def default_resp(result, _) when is_tuple(result), do: result

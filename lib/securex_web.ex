@@ -3,6 +3,9 @@ defmodule SecureXWeb do
 
   def controller do
     quote do
+      import Sage
+      import SecureX.Helper
+      import Macro, only: [camelize: 1, underscore: 1]
       use Phoenix.Controller, namespace: SecureXWeb
     end
   end
