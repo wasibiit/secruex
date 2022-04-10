@@ -46,7 +46,7 @@ defmodule SecureX.Context do
   end
 
   def get_role_by(id),
-      do: from(r in Role, where: r.id == ^id) |> repo().one
+    do: from(r in Role, where: r.id == ^id) |> repo().one
 
   def create_role(attrs \\ %{}) do
     %Role{}

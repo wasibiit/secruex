@@ -47,14 +47,11 @@ defmodule SecureXWeb.RoleController do
         ]
       }
   """
+
   @spec get(map()) :: tuple()
-  def get(params) when params !== %{} do
-    case params do
-      %{role: role} -> get_role(role)
-      %{"role" => role} -> get_role(role)
-      _ -> {:error, :bad_input}
-    end
-  end
+  def get(%{role: role}), do: get_role(role)
+
+  def get(%{"role" => role}), do: get_role(role)
 
   def get(_), do: {:error, :bad_input}
 
@@ -86,8 +83,13 @@ defmodule SecureXWeb.RoleController do
     |> transaction(SecureX.Repo, input)
   end
 
-  defp get_role(_, %{role: role}),
-  do: role |> trimmed_downcase |> Context.get_role_by() |> default_resp(mode: :reverse, msg: :alrady_exist)
+  defp get_role(_, %{role: role} = params),
+    do:
+      params["id"] ||
+        role
+        |> trimmed_downcase
+        |> Context.get_role_by()
+        |> default_resp(mode: :reverse, msg: :alrady_exist)
 
   defp get_role(params) do
     case Context.get_role(params) do
@@ -122,7 +124,11 @@ defmodule SecureXWeb.RoleController do
     |> then(fn
       [] ->
         permissions =
-          resources |> Enum.map(fn %{id: res_id} -> %{resource_id: res_id, role_id: role_id, permission: -1} end)
+          resources
+          |> Enum.map(fn %{id: res_id} ->
+            %{resource_id: res_id, role_id: role_id, permission: -1}
+          end)
+
         Permission |> Context.create_all(permissions) |> default_resp()
 
       _ ->
@@ -143,83 +149,67 @@ defmodule SecureXWeb.RoleController do
       }
   """
   @spec update(map()) :: struct()
-  def update(params) when params !== %{} do
-    case params do
-      %{id: role_id, role: _} ->
-        update_role_checks(role_id, params)
+  def update(%{id: _, role: _} = input), do: update_role_sage(input)
 
-      %{"id" => role_id, "role" => _} ->
-        params = keys_to_atoms(params)
-        update_role_checks(role_id, params)
-
-      _ ->
-        {:error, :bad_input}
-    end
-  end
+  def update(%{"id" => _, "role" => _} = input),
+    do: input |> keys_to_atoms |> update_role_sage()
 
   def update(_), do: {:error, :bad_input}
 
-  defp update_role_checks(role_id, params) do
-    role_id = role_id |> trimmed_downcase
-    with %{__struct__: _} = prev_role <- Context.get_role_by(role_id),
-         {:ok, new_role} <- update_role(prev_role, params),
-         {:ok, new_role} <- update_permissions(new_role, params) do
-      {:ok, new_role}
-    else
-      nil -> {:error, :alrady_exist}
-      {:error, error} -> {:error, error}
-    end
+  defp update_role_sage(input) do
+    new()
+    |> run(:role, &get_role/2, &abort/3)
+    |> run(:update, &update_role/2, &abort/3)
+    |> run(:permission, &update_permissions/2, &abort/3)
+    |> transaction(SecureX.Repo, input)
   end
 
-  defp update_role(prev_role, %{role: new_role}) do
+  defp update_role(%{role: %{id: role_id} = prev_role}, %{role: new_role}) do
     name = new_role |> String.trim()
+    updated_role = new_role |> downcase()
 
-    updated_role =
-      name
-      |> String.downcase()
-      |> String.replace(" ", "_")
+    if role_id !== updated_role do
+      new_role = Context.create_role(%{id: updated_role, name: camelize(name)}) |> default_resp()
 
-    if prev_role.id !== updated_role do
-      new_role = Context.create_role(%{id: updated_role, name: camelize(name)})
-
-      case Context.get_permissions(prev_role.id) do
+      case Context.get_permissions(role_id) do
         [] ->
           :nothing
 
         permissions ->
           Enum.each(permissions, fn per ->
-            Context.update_permission(per, %{role_id: updated_role})
+            Context.update_permission(per, %{role_id: updated_role}) |> default_resp()
           end)
       end
 
-      case Context.get_user_roles_by(%{role_id: prev_role.id}) do
+      case Context.get_user_roles_by(%{role_id: role_id}) do
         [] ->
           :nothing
 
         user_roles ->
           Enum.each(user_roles, fn user_role ->
-            Context.update_user_role(user_role, %{role_id: updated_role})
+            Context.update_user_role(user_role, %{role_id: updated_role}) |> default_resp()
           end)
       end
 
-      Context.delete_role(prev_role)
+      Context.delete_role(prev_role) |> default_resp()
       new_role
     else
       {:ok, prev_role}
     end
   end
 
-  defp update_permissions(role, %{permissions: permissions}) when permissions !== [] do
+  defp update_permissions(%{update: %{id: role_id} = role}, %{permissions: permissions})
+       when permissions !== [] do
     permissions =
       Enum.map(
         permissions,
         fn per ->
           case per do
             %{"resource_id" => resource_id, "permission" => permission} ->
-              update_permission(resource_id, permission, role.id)
+              update_permission(resource_id, permission, role_id) |> default_resp
 
             %{resource_id: resource_id, permission: permission} ->
-              update_permission(resource_id, permission, role.id)
+              update_permission(resource_id, permission, role_id) |> default_resp
 
             _ ->
               :bad_input
@@ -230,7 +220,7 @@ defmodule SecureXWeb.RoleController do
     {:ok, Map.merge(role, %{permissions: permissions})}
   end
 
-  defp update_permissions(role, _), do: {:ok, role}
+  defp update_permissions(%{update: role}, _), do: {:ok, role}
 
   defp update_permission(resource_id, updated_permission, role_id) do
     case Context.get_permission(resource_id, role_id) do
@@ -256,30 +246,23 @@ defmodule SecureXWeb.RoleController do
       }
   """
   @spec delete(map()) :: struct()
-  def delete(params) when params !== %{} do
-    case params do
-      %{id: role_id} -> delete_role_checks(role_id)
-      %{"id" => role_id} -> delete_role_checks(role_id)
-      _ -> {:error, :bad_input}
-    end
-  end
+  def delete(%{id: _} = input), do: delete_role_sage(input)
+
+  def delete(%{"id" => _} = input),
+    do: input |> keys_to_atoms |> delete_role_sage()
 
   def delete(_), do: {:error, :bad_input}
 
-  defp delete_role_checks(role_id) do
-    role_id = role_id |> trimmed_downcase
-    with %{__struct__: _} = role <- Context.get_role_by(role_id),
-         {:ok, permission} <- delete_permissions(role),
-         {:ok, user_role} <- delete_user_roles(role),
-         {:ok, role} <- delete_role(role) do
-      {:ok, Map.merge(role, %{permissions: permission, user_roles: user_role})}
-    else
-      nil -> {:error, :doesnt_exist}
-      {:error, error} -> {:error, error}
-    end
+  defp delete_role_sage(input) do
+    new()
+    |> run(:role, &get_role/2, &abort/3)
+    |> run(:permission, &delete_permissions/2, &abort/3)
+    |> run(:user_role, &delete_user_roles/2, &abort/3)
+    |> run(:delete, &delete_role/2, &abort/3)
+    |> transaction(SecureX.Repo, input)
   end
 
-  defp delete_permissions(%{id: role_id}) do
+  defp delete_permissions(%{role: %{id: role_id}}, _) do
     case Context.get_permissions(role_id) do
       [] ->
         {:ok, :already_removed}
@@ -295,25 +278,24 @@ defmodule SecureXWeb.RoleController do
     end
   end
 
-  defp delete_permissions(_), do: {:ok, :invalid_role_id}
-
-  defp delete_user_roles(%{id: role_id}) do
+  defp delete_user_roles(%{role: %{id: role_id}}, _) do
     case Context.get_user_roles_by(%{role_id: role_id}) do
       [] ->
         {:ok, :already_removed}
 
       user_roles ->
-        Enum.each(user_roles, fn user_role -> Context.delete_user_role(user_role) end)
+        Enum.each(user_roles, fn user_role ->
+          Context.delete_user_role(user_role) |> default_resp
+        end)
+
         {:ok, :successfully_removed_user_roles}
     end
   end
 
-  defp delete_user_roles(_), do: {:ok, :invalid_role_id}
-
-  defp delete_role(role) do
+  defp delete_role(%{role: role, permission: permission, user_role: user_role}, _) do
     case Context.delete_role(role) do
       {:error, error} -> {:error, error}
-      {:ok, role} -> {:ok, role}
+      {:ok, role} -> {:ok, Map.merge(role, %{permissions: permission, user_roles: user_role})}
     end
   end
 end

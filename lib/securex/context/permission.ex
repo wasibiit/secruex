@@ -3,10 +3,10 @@ defmodule SecureX.Permission do
   use SecureX.Schema
 
   schema "permissions" do
-    field :permission, :integer
+    field(:permission, :integer)
 
-    belongs_to :resource, SecureX.Resource, type: :string
-    belongs_to :role, SecureX.Role, type: :string
+    belongs_to(:resource, SecureX.Resource, type: :string)
+    belongs_to(:role, SecureX.Role, type: :string)
 
     timestamp()
   end

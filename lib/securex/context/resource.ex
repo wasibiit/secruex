@@ -4,8 +4,8 @@ defmodule SecureX.Resource do
 
   @primary_key false
   schema "resources" do
-    field :id, :string, primary_key: true
-    field :name, :string
+    field(:id, :string, primary_key: true)
+    field(:name, :string)
 
     timestamp()
   end

@@ -24,7 +24,7 @@ defmodule SecureX.Helper do
   def keys_to_atoms(value), do: value
 
   @spec trimmed_downcase(String.t()) :: String.t()
-  def trimmed_downcase(str), do: str |> String.trim |> downcase
+  def trimmed_downcase(str), do: str |> String.trim() |> downcase
 
   @spec downcase(String.t()) :: String.t()
   def downcase(str), do: str |> String.downcase() |> String.replace(" ", "_")

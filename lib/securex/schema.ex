@@ -17,12 +17,13 @@ defmodule SecureX.Schema do
   defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
-      import H2nApi.Schema
+      import SecureX.Schema
       import Ecto.Changeset
 
       primary_key =
         if Application.get_env(:securex, :type) == :binary_id,
-           do: {:id, :binary_id, autogenerate: true}, else: {:id, :id, autogenerate: true}
+          do: {:id, :binary_id, autogenerate: true},
+          else: {:id, :id, autogenerate: true}
 
       foreign_key_type =
         if Application.get_env(:securex, :type) === :binary_id, do: Ecto.UUID, else: :id
@@ -36,7 +37,7 @@ defmodule SecureX.Schema do
 
   defmacro timestamp() do
     quote do
-      field :deleted_at, :utc_datetime
+      field(:deleted_at, :utc_datetime)
       timestamps()
     end
   end

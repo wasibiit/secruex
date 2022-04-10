@@ -3,8 +3,12 @@ defmodule SecureX.UserRole do
   use SecureX.Schema
 
   schema "user_roles" do
-    belongs_to :role, SecureX.Role, type: :string
-    belongs_to :user, Application.get_env(:securex, :schema) || raise "Set SecureX Configuration"
+    belongs_to(:role, SecureX.Role, type: :string)
+
+    belongs_to(
+      :user,
+      Application.get_env(:securex, :schema) || raise("Set SecureX Configuration")
+    )
 
     timestamp()
   end
