@@ -149,9 +149,9 @@ defmodule SecureX.Context do
     |> repo().one
   end
 
-  def get_permissions(role_id) do
+  def update_permissions(role_id,updated_role) do
     from(p in Permission, where: p.role_id == ^role_id, preload: [:resource, :role])
-    |> repo().all
+    |> repo().update_all(set: [role_id: "New title"])
   end
 
   def get_permissions_by_res_id(res_id) do
@@ -231,11 +231,11 @@ defmodule SecureX.Context do
     |> repo().one
   end
 
-  def get_user_roles_by(%{role_id: role_id}) do
+  def update_user_roles(%{role_id: role_id}, updated_role) do
     from(ur in UserRole,
       where: ur.role_id == ^role_id
     )
-    |> repo().all
+    |> repo().update_all(set: [role_id: ^updated_role])
   end
 
   def get_user_roles_by_user_id(user_id) do
@@ -252,11 +252,10 @@ defmodule SecureX.Context do
     |> repo().insert()
   end
 
-  def update_user_role(%UserRole{} = user_role, attrs) do
-    user_role
-    |> UserRole.changeset(attrs)
-    |> repo().update()
-  end
+  #  @spec update_user_roles(list(), String.Chars) :: {integer(), nil | [term()]}
+  #  def update_user_roles(user_roles, updated_role) do
+  #    repo().update_all(user_roles, set: [role_is: ^updated_role])
+  #  end
 
   def delete_user_role(%UserRole{} = user_role) do
     repo().delete(user_role)

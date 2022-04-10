@@ -49,9 +49,9 @@ defmodule SecureXWeb.RoleController do
   """
 
   @spec get(map()) :: tuple()
-  def get(%{role: role}), do: get_role(role)
+  def get(%{role: role}), do: Context.get_role(role) |> default_resp
 
-  def get(%{"role" => role}), do: get_role(role)
+  def get(%{"role" => role}), do: Context.get_role(role) |> default_resp
 
   def get(_), do: {:error, :bad_input}
 
@@ -90,13 +90,6 @@ defmodule SecureXWeb.RoleController do
         |> trimmed_downcase
         |> Context.get_role_by()
         |> default_resp(mode: :reverse, msg: :alrady_exist)
-
-  defp get_role(params) do
-    case Context.get_role(params) do
-      nil -> {:error, :no_role_found}
-      role -> {:ok, role}
-    end
-  end
 
   defp create_role(_, %{role: role}) do
     name = role |> String.trim()
@@ -164,38 +157,30 @@ defmodule SecureXWeb.RoleController do
     |> transaction(SecureX.Repo, input)
   end
 
-  defp update_role(%{role: %{id: role_id} = prev_role}, %{role: new_role}) do
+  defp update_role(%{role: %{id: role_id} = prev_role}, %{role: new_role})
+       when role_id !== new_role |> downcase() do
     name = new_role |> String.trim()
     updated_role = new_role |> downcase()
+    new_role = Context.create_role(%{id: updated_role, name: camelize(name)}) |> default_resp()
 
-    if role_id !== updated_role do
-      new_role = Context.create_role(%{id: updated_role, name: camelize(name)}) |> default_resp()
+    case Context.get_permissions(role_id) do
+      [] ->
+        :nothing
 
-      case Context.get_permissions(role_id) do
-        [] ->
-          :nothing
-
-        permissions ->
-          Enum.each(permissions, fn per ->
-            Context.update_permission(per, %{role_id: updated_role}) |> default_resp()
-          end)
-      end
-
-      case Context.get_user_roles_by(%{role_id: role_id}) do
-        [] ->
-          :nothing
-
-        user_roles ->
-          Enum.each(user_roles, fn user_role ->
-            Context.update_user_role(user_role, %{role_id: updated_role}) |> default_resp()
-          end)
-      end
-
-      Context.delete_role(prev_role) |> default_resp()
-      new_role
-    else
-      {:ok, prev_role}
+      permissions ->
+        Enum.each(permissions, fn per ->
+          Context.update_permission(per, %{role_id: updated_role}) |> default_resp()
+        end)
     end
+
+    Context.update_user_roles(%{role_id: role_id}, updated_role) |> default_resp()
+
+    Context.delete_role(prev_role) |> default_resp()
+    new_role
+  end
+
+  defp update_role(%{role: prev_role}, _) do
+    {:ok, prev_role}
   end
 
   defp update_permissions(%{update: %{id: role_id} = role}, %{permissions: permissions})
