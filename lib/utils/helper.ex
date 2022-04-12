@@ -45,9 +45,20 @@ defmodule SecureX.Helper do
 
   def default_resp(result, _) when is_list(result), do: ok(result)
 
+  def default_resp({:ok, _, result}, in: in_, key: key, against: against) when is_map(result) do
+    in_ = result |> Map.get(in_)
+    key = result |> Map.get(key)
+    Map.put(in_, against, key) |> ok()
+  end
+
+  def default_resp({:ok, _, result}, key: key) when is_map(result),
+    do: result |> Map.get(key) |> ok()
+
   def default_resp({_, nil}, msg: err), do: err |> error()
 
   def default_resp({_, nil}, _), do: error()
+
+  def default_resp({_, result}, msg: msg) when is_list(result), do: ok(msg)
 
   def default_resp({_, result}, _) when is_list(result), do: ok(result)
 

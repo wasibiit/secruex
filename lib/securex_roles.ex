@@ -23,13 +23,8 @@ defmodule SecureX.Roles do
       }
      ]
   """
-  @spec list() :: nonempty_list()
-  def list() do
-    case RoleController.list_roles() do
-      [] -> {:error, :no_roles_found}
-      roles -> {:ok, roles}
-    end
-  end
+  @spec list() :: tuple()
+  def list(), do: RoleController.list_roles()
 
   @doc """
   Get a Role.
@@ -47,13 +42,8 @@ defmodule SecureX.Roles do
         ]
       }
   """
-  @spec get(map()) :: struct()
-  def get(params) do
-    case RoleController.get(params) do
-      {:error, error} -> {:error, error}
-      {:ok, role} -> {:ok, role}
-    end
-  end
+  @spec get(map()) :: tuple()
+  def get(params), do: RoleController.get(params)
 
   @doc """
   Add a Role. You can send either `Atom Map` or `String Map` to add a Role. If you have existing resources,
@@ -75,13 +65,8 @@ defmodule SecureX.Roles do
   Your will get Role `struct()` with all permissions created for the resources if they exist.
   `list()`of permissions you will get in simple `map()`.
   """
-  @spec add(map()) :: struct()
-  def add(params) do
-    case RoleController.create(params) do
-      {:error, error} -> {:error, error}
-      {:ok, role} -> {:ok, role}
-    end
-  end
+  @spec add(map()) :: tuple()
+  def add(params), do: RoleController.create(params)
 
   @doc """
   Update a Role. You can update any role along with its permissions if you want, if you pass `:permissions`
@@ -91,23 +76,17 @@ defmodule SecureX.Roles do
   ## Examples
 
       iex> update(%{"id" => "super_admin", "role" => "Admin", "permissions" => [%{"resource_id" => "users", "permission" => 4}]})
-      %Role{
-        id: admin,
-        name: "Admin",
-        permission: [
-          %{resource_id: "users", permission: 4, role_id: "admin"}
-        ]
+      {:ok, %Role{
+              id: admin,
+              name: "Admin",
+              permission: [%{resource_id: "users", permission: 4, role_id: "admin"}]
+          }
       }
 
   It will return with permissions that you sent in params to change.
   """
-  @spec update(map()) :: struct()
-  def update(params) do
-    case RoleController.update(params) do
-      {:error, error} -> {:error, error}
-      {:ok, role} -> {:ok, role}
-    end
-  end
+  @spec update(map()) :: tuple()
+  def update(params), do: RoleController.update(params)
 
   @doc """
   Delete a Role. All `Permissions` and `UserRoles` will be removed against this role.
@@ -122,11 +101,6 @@ defmodule SecureX.Roles do
         user_roles: :successfully_removed_user_roles
       }
   """
-  @spec delete(map()) :: struct()
-  def delete(params) do
-    case RoleController.delete(params) do
-      {:error, error} -> {:error, error}
-      {:ok, role} -> {:ok, role}
-    end
-  end
+  @spec delete(map()) :: tuple()
+  def delete(params), do: RoleController.delete(params)
 end

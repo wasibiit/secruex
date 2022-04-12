@@ -137,22 +137,24 @@ defmodule SecureX.Context do
   #  end
 
   def get_permission(res_id, role_id) do
-    from(p in Permission,
-      where: p.resource_id == ^res_id and p.role_id == ^role_id,
-      preload: [:resource, :role]
-    )
+    from(p in Permission, where: p.resource_id == ^res_id and p.role_id == ^role_id)
+    |> preload_clause
     |> repo().one
   end
 
   def get_permission(per_id) do
-    from(p in Permission, where: p.id == ^per_id, preload: [:resource, :role])
+    from(p in Permission, where: p.id == ^per_id)
+    |> preload_clause
     |> repo().one
   end
 
-  def update_permissions(role_id,updated_role) do
-    from(p in Permission, where: p.role_id == ^role_id, preload: [:resource, :role])
-    |> repo().update_all(set: [role_id: "New title"])
+  def update_permissions(role_id, role) do
+    from(p in Permission, where: p.role_id == ^role_id)
+    |> preload_clause
+    |> repo().update_all(set: [role_id: role])
   end
+
+  defp preload_clause(query), do: query |> preload([p], [:resource, :role])
 
   def get_permissions_by_res_id(res_id) do
     from(p in Permission,
@@ -209,6 +211,11 @@ defmodule SecureX.Context do
     repo().delete(permission)
   end
 
+  def delete_permissions(role_id) do
+    from(p in Permission, where: p.role_id == ^role_id)
+    |> repo().delete_all()
+  end
+
   @spec preload_user_roles(struct()) :: struct()
   def preload_user_roles(data), do: repo().preload(data, [:role, :user])
 
@@ -231,11 +238,11 @@ defmodule SecureX.Context do
     |> repo().one
   end
 
-  def update_user_roles(%{role_id: role_id}, updated_role) do
+  def update_user_roles(role_id, role) do
     from(ur in UserRole,
       where: ur.role_id == ^role_id
     )
-    |> repo().update_all(set: [role_id: ^updated_role])
+    |> repo().update_all(set: [role_id: ^role])
   end
 
   def get_user_roles_by_user_id(user_id) do
@@ -259,6 +266,11 @@ defmodule SecureX.Context do
 
   def delete_user_role(%UserRole{} = user_role) do
     repo().delete(user_role)
+  end
+
+  def delete_user_roles(role_id) do
+    from(u_r in UserRole, where: u_r.role_id == ^role_id)
+    |> repo().delete_all()
   end
 
   @spec create(atom(), map()) :: {:ok, struct()} | {:error, struct()}
