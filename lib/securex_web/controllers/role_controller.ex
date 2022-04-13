@@ -89,8 +89,8 @@ defmodule SecureXWeb.RoleController do
     |> transaction(SecureX.Repo.repo(), input)
   end
 
-  defp get_role(_, %{role: role} = params) do
-    role = params[:id] || role
+  defp get_role(_, params) do
+    role = params |> Map.get(:id) || params |> Map.get(:role) || params |> Map.get(:id)
     role = role |> trimmed_downcase |> Context.get_role_by()
     if role, do: role |> default_resp(), else: role |> default_resp(mode: :reverse)
   end
@@ -183,7 +183,7 @@ defmodule SecureXWeb.RoleController do
   end
 
   defp check_role(%{role: %{id: role_id}},  %{role: role}), do:
-    if role_id !== downcase(role), do: ok(true), else: ok(false)
+    if role_id !== downcase(role), do: default_resp(true), else: default_resp(false)
 
   defp check_role(%{role: nil}, _), do: error()
 
@@ -267,14 +267,14 @@ defmodule SecureXWeb.RoleController do
     |> run(:permissions, &delete_permissions/2, &abort/3)
     |> run(:user_roles, &delete_user_roles/2, &abort/3)
     |> run(:delete, &delete_role/2, &abort/3)
-    |> transaction(SecureX.Repo, input)
+    |> transaction(SecureX.Repo.repo(), input)
   end
 
   defp delete_permissions(%{role: %{id: role_id}}, _),
-       do: Context.delete_permissions(role_id) |> default_resp(msg: :permissions_removed_successfully)
+       do: Context.delete_permissions(role_id) |> default_resp(mode: :reverse, msg: :permissions_removed_successfully)
 
   defp delete_user_roles(%{role: %{id: role_id}}, _),
-       do: Context.delete_user_roles(role_id) |> default_resp(msg: :user_roles_removed_successfully)
+       do: Context.delete_user_roles(role_id) |> default_resp(mode: :reverse, msg: :user_roles_removed_successfully)
 
   defp delete_role(%{role: role}, _), do: Context.delete_role(role) |> default_resp
 end
