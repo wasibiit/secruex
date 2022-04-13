@@ -242,7 +242,7 @@ defmodule SecureX.Context do
     from(ur in UserRole,
       where: ur.role_id == ^role_id
     )
-    |> repo().update_all(set: [role_id: ^role])
+    |> repo().update_all(set: [role_id: role])
   end
 
   def get_user_roles_by_user_id(user_id) do

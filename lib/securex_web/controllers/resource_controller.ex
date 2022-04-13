@@ -38,7 +38,7 @@ defmodule SecureXWeb.ResourceController do
         name: "Persons Farm"
       }
   """
-  @spec get(map()) :: struct()
+  @spec get(map()) :: tuple()
   def get(params) when params !== %{} do
     case params do
       %{res: res_id} -> get_resource(res_id)
@@ -66,7 +66,7 @@ defmodule SecureXWeb.ResourceController do
         name: "Persons Farm"
       }
   """
-  @spec create(map()) :: struct()
+  @spec create(map()) :: tuple()
   def create(params) when params !== %{} do
     case params do
       %{res: res} -> create_res_checks(res)

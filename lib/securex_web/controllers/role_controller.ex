@@ -86,7 +86,7 @@ defmodule SecureXWeb.RoleController do
     |> run(:res, &get_resources/2, &abort/3)
     |> run(:create, &create_role/2, &abort/3)
     |> run(:permissions, &create_permissions/2, &abort/3)
-    |> transaction(SecureX.Repo, input)
+    |> transaction(SecureX.Repo.repo(), input)
   end
 
   defp get_role(_, %{role: role} = params) do
@@ -94,7 +94,7 @@ defmodule SecureXWeb.RoleController do
       role
       |> trimmed_downcase
       |> Context.get_role_by()
-      |> default_resp(mode: :reverse, msg: :alrady_exist)
+      |> default_resp(mode: :reverse)
   end
 
   defp create_role(_, %{role: role}), do: role |> create_role() |> default_resp()
@@ -112,8 +112,9 @@ defmodule SecureXWeb.RoleController do
     Context.get_permission_by([role_id])
     |> then(fn
       [] ->
-        permissions = permissions |> Enum.map(fn map -> Map.put(map, :role_id, role_id) end)
-        Permission |> Context.create_all(permissions) |> default_resp()
+        permissions = permissions |> Enum.map(fn map ->
+          Map.put(map, :role_id, role_id) |> insert_timestamp end)
+        Permission |> Context.create_all(permissions) |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
         {:ok, :permissions_already_set}
@@ -127,14 +128,26 @@ defmodule SecureXWeb.RoleController do
         permissions =
           resources
           |> Enum.map(fn %{id: res_id} ->
-            %{resource_id: res_id, role_id: role_id, permission: -1}
+            %{
+              resource_id: res_id,
+              role_id: role_id,
+              permission: -1
+            } |> insert_timestamp
           end)
 
-        Permission |> Context.create_all(permissions) |> default_resp()
+        Permission |> Context.create_all(permissions) |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
         {:ok, :permissions_already_set}
     end)
+  end
+
+  defp insert_timestamp(map) do
+    map
+    |> Map.merge(%{
+      updated_at: DateTime.truncate(DateTime.utc_now, :second),
+      inserted_at: DateTime.truncate(DateTime.utc_now, :second)
+    })
   end
 
   @doc """
@@ -165,13 +178,16 @@ defmodule SecureXWeb.RoleController do
   defp update_role_sage(input) do
     new()
     |> run(:role, &get_role/2, &abort/3)
+    |> run(:check, &check_role/2, &abort/3)
     |> run(:update, &update_role/2, &abort/3)
     |> run(:permissions, &update_permissions/2, &abort/3)
-    |> transaction(SecureX.Repo, input)
+    |> Sage.transaction(SecureX.Repo, input)
   end
 
-  defp update_role(%{role: %{id: role_id} = prev_role}, %{role: role})
-       when role_id !== role |> downcase() do
+  defp check_role(%{role: %{id: role_id}},  %{role: role}), do:
+    if role_id !== downcase(role), do: {:ok, true}, else: {:error, false}
+
+  defp update_role(%{role: %{id: role_id} = prev_role, check: true}, %{role: role}) do
     {:ok, %{id: new_role_id}} =
       new_role = role |> create_role()
 
@@ -255,10 +271,10 @@ defmodule SecureXWeb.RoleController do
   end
 
   defp delete_permissions(%{role: %{id: role_id}}, _),
-    do: Context.delete_permissions(role_id) |> default_resp(msg: :permissions_removed_successfully)
+       do: Context.delete_permissions(role_id) |> default_resp(msg: :permissions_removed_successfully)
 
   defp delete_user_roles(%{role: %{id: role_id}}, _),
-    do: Context.delete_user_roles(role_id) |> default_resp(msg: :user_roles_removed_successfully)
+       do: Context.delete_user_roles(role_id) |> default_resp(msg: :user_roles_removed_successfully)
 
   defp delete_role(%{role: role}, _), do: Context.delete_role(role) |> default_resp
 end

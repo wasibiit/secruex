@@ -7,7 +7,7 @@ defmodule SecureX.UserRole do
 
     belongs_to(
       :user,
-      Application.get_env(:securex, :schema) || raise("Set SecureX Configuration")
+        Application.get_env(:securex, :schema) || raise("Set SecureX Configuration")
     )
 
     timestamp()

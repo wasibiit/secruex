@@ -16,7 +16,7 @@ defmodule SecureX.Permissions do
       %{ permission: 4, resource_id: "person_form", role_id: "super_admin"}
      ]
   """
-  @spec list(list()) :: nonempty_list()
+  @spec list(list()) :: tuple()
   def list(params) do
     case PermissionController.list_permissions(params) do
       [] -> {:error, :no_permissions_found}
@@ -37,7 +37,7 @@ defmodule SecureX.Permissions do
         role_id: "super_admin"
       }
   """
-  @spec add(map()) :: struct()
+  @spec add(map()) :: tuple()
   def add(params) do
     case PermissionController.create(params) do
       {:error, error} -> {:error, error}
@@ -59,7 +59,7 @@ defmodule SecureX.Permissions do
       }
 
   """
-  @spec update(map()) :: struct()
+  @spec update(map()) :: tuple()
   def update(params) do
     case PermissionController.update(params) do
       {:error, error} -> {:error, error}
@@ -80,7 +80,7 @@ defmodule SecureX.Permissions do
         role_id: "admin"
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) do
     case PermissionController.delete(params) do
       {:error, error} -> {:error, error}

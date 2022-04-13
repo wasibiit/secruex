@@ -22,7 +22,7 @@ defmodule SecureX.UserRoles do
         }
       ]
   """
-  @spec get(map()) :: struct()
+  @spec get(map()) :: tuple()
   def get(params) do
     case UserRoleController.get(params) do
       {:error, error} -> {:error, error}
@@ -42,7 +42,7 @@ defmodule SecureX.UserRoles do
         role_id: "super_admin"
       }
   """
-  @spec add(map()) :: struct()
+  @spec add(map()) :: tuple()
   def add(params) do
     case UserRoleController.create(params) do
       {:error, error} -> {:error, error}
@@ -62,7 +62,7 @@ defmodule SecureX.UserRoles do
         role_id: "admin"
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) do
     case UserRoleController.delete(params) do
       {:error, error} -> {:error, error}

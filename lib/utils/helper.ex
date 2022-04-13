@@ -54,6 +54,8 @@ defmodule SecureX.Helper do
   def default_resp({:ok, _, result}, key: key) when is_map(result),
     do: result |> Map.get(key) |> ok()
 
+  def default_resp({_, nil}, mode: :reverse, msg: msg), do: ok(msg)
+
   def default_resp({_, nil}, msg: err), do: err |> error()
 
   def default_resp({_, nil}, _), do: error()

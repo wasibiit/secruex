@@ -1,6 +1,7 @@
 defmodule SecureXWeb do
   @moduledoc false
 
+  @spec controller :: {:__block__, [], [{:import, [...], [...]} | {:use, [...], [...]}, ...]}
   def controller do
     quote do
       import Sage
@@ -10,6 +11,7 @@ defmodule SecureXWeb do
     end
   end
 
+  @spec __using__(atom) :: any
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """

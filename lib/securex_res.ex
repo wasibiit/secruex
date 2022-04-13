@@ -22,7 +22,7 @@ defmodule SecureX.Res do
       }
       ]
   """
-  @spec list() :: nonempty_list()
+  @spec list() :: tuple()
   def list() do
     case ResourceController.list_resources() do
       [] -> {:error, :no_resources_found}
@@ -41,7 +41,7 @@ defmodule SecureX.Res do
         name: "Persons Farm"
       }
   """
-  @spec get(map()) :: struct()
+  @spec get(map()) :: tuple()
   def get(params) do
     case ResourceController.get(params) do
       {:error, error} -> {:error, error}
@@ -60,7 +60,7 @@ defmodule SecureX.Res do
         name: "Persons Farm"
       }
   """
-  @spec add(map()) :: struct()
+  @spec add(map()) :: tuple()
   def add(params) do
     case ResourceController.create(params) do
       {:error, error} -> {:error, error}
@@ -83,7 +83,7 @@ defmodule SecureX.Res do
       }
 
   """
-  @spec update(map()) :: struct()
+  @spec update(map()) :: tuple()
   def update(params) do
     case ResourceController.update(params) do
       {:error, error} -> {:error, error}
@@ -103,7 +103,7 @@ defmodule SecureX.Res do
         permissions: :successfully_removed_permissions
       }
   """
-  @spec delete(map()) :: struct()
+  @spec delete(map()) :: tuple()
   def delete(params) do
     case ResourceController.delete(params) do
       {:error, error} -> {:error, error}
