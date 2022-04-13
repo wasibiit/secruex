@@ -90,11 +90,9 @@ defmodule SecureXWeb.RoleController do
   end
 
   defp get_role(_, %{role: role} = params) do
-    params["id"] ||
-      role
-      |> trimmed_downcase
-      |> Context.get_role_by()
-      |> default_resp(mode: :reverse)
+    role = params[:id] || role
+    role = role |> trimmed_downcase |> Context.get_role_by()
+    if role, do: role |> default_resp(), else: role |> default_resp(mode: :reverse)
   end
 
   defp create_role(_, %{role: role}), do: role |> create_role() |> default_resp()
@@ -181,19 +179,21 @@ defmodule SecureXWeb.RoleController do
     |> run(:check, &check_role/2, &abort/3)
     |> run(:update, &update_role/2, &abort/3)
     |> run(:permissions, &update_permissions/2, &abort/3)
-    |> Sage.transaction(SecureX.Repo, input)
+    |> transaction(SecureX.Repo.repo(), input)
   end
 
   defp check_role(%{role: %{id: role_id}},  %{role: role}), do:
-    if role_id !== downcase(role), do: {:ok, true}, else: {:error, false}
+    if role_id !== downcase(role), do: ok(true), else: ok(false)
+
+  defp check_role(%{role: nil}, _), do: error()
 
   defp update_role(%{role: %{id: role_id} = prev_role, check: true}, %{role: role}) do
     {:ok, %{id: new_role_id}} =
       new_role = role |> create_role()
 
-    Context.update_permissions(role_id, %{role_id: new_role_id})
+    Context.update_permissions(role_id, new_role_id)
 
-    Context.update_user_roles(%{role_id: role_id}, new_role_id)
+    Context.update_user_roles(role_id, new_role_id)
 
     Context.delete_role(prev_role)
     new_role

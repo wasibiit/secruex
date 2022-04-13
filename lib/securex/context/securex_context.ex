@@ -150,7 +150,6 @@ defmodule SecureX.Context do
 
   def update_permissions(role_id, role) do
     from(p in Permission, where: p.role_id == ^role_id)
-    |> preload_clause
     |> repo().update_all(set: [role_id: role])
   end
 
@@ -281,5 +280,5 @@ defmodule SecureX.Context do
   end
 
   @spec create_all(atom(), list()) :: {integer(), nil | [term()]}
-  def create_all(model, attrs \\ []), do: struct(model) |> repo().insert_all(attrs)
+  def create_all(model, attrs \\ []), do: model |> repo().insert_all(attrs)
 end
