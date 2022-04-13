@@ -4,20 +4,20 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "1.0.1",
+      version: "1.0.2",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       description:
         "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
-      links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
+      links: %{"GitHub" => "https://github.com/wasitanbits/secruex"},
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
       name: "SecureX",
-      source_url: "https://github.com/DevWasi/secruex",
-      homepage_url: "https://github.com/DevWasi/secruex",
+      source_url: "https://github.com/wasitanbits/secruex",
+      homepage_url: "https://github.com/wasitanbits/secruex",
       docs: [
         # The main page in the docs
         main: "SecureX",
@@ -38,7 +38,7 @@ defmodule SecureX.MixProject do
       files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/DevWasi/secruex"},
+      links: %{"GitHub" => "https://github.com/wasitanbits/secruex"},
       description:
         "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions."
     ]
@@ -55,13 +55,14 @@ defmodule SecureX.MixProject do
   defp deps do
     [
       [
-        {:gettext, "~> 0.19.1"},
+
         {:phoenix, "~> 1.6"},
-        {:jason, "~> 1.3"},
         {:ecto_sql, "~> 3.7"},
-        {:sage, "~> 0.6.1"}
+        {:sage, "~> 0.6.1"},
+        {:scrivener, "~> 2.7"}
       ],
       [
+        {:gettext, "~> 0.19.1", only: :dev, runtime: false},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
         {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false}
       ]

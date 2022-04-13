@@ -110,9 +110,15 @@ defmodule SecureXWeb.RoleController do
     Context.get_permission_by([role_id])
     |> then(fn
       [] ->
-        permissions = permissions |> Enum.map(fn map ->
-          Map.put(map, :role_id, role_id) |> insert_timestamp end)
-        Permission |> Context.create_all(permissions) |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
+        permissions =
+          permissions
+          |> Enum.map(fn map ->
+            Map.put(map, :role_id, role_id) |> insert_timestamp
+          end)
+
+        Permission
+        |> Context.create_all(permissions)
+        |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
         {:ok, :permissions_already_set}
@@ -130,10 +136,13 @@ defmodule SecureXWeb.RoleController do
               resource_id: res_id,
               role_id: role_id,
               permission: -1
-            } |> insert_timestamp
+            }
+            |> insert_timestamp
           end)
 
-        Permission |> Context.create_all(permissions) |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
+        Permission
+        |> Context.create_all(permissions)
+        |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
         {:ok, :permissions_already_set}
@@ -143,8 +152,8 @@ defmodule SecureXWeb.RoleController do
   defp insert_timestamp(map) do
     map
     |> Map.merge(%{
-      updated_at: DateTime.truncate(DateTime.utc_now, :second),
-      inserted_at: DateTime.truncate(DateTime.utc_now, :second)
+      updated_at: DateTime.truncate(DateTime.utc_now(), :second),
+      inserted_at: DateTime.truncate(DateTime.utc_now(), :second)
     })
   end
 
@@ -162,7 +171,9 @@ defmodule SecureXWeb.RoleController do
   """
   @spec update(map()) :: tuple()
   def update(%{id: _, role: _} = input),
-      do: update_role_sage(input) |> default_resp(in: :update, key: :permissions, against: :permission)
+    do:
+      update_role_sage(input)
+      |> default_resp(in: :update, key: :permissions, against: :permission)
 
   def update(%{"id" => _, "role" => _} = input) do
     input
@@ -182,14 +193,13 @@ defmodule SecureXWeb.RoleController do
     |> transaction(SecureX.Repo.repo(), input)
   end
 
-  defp check_role(%{role: %{id: role_id}},  %{role: role}), do:
-    if role_id !== downcase(role), do: default_resp(true), else: default_resp(false)
+  defp check_role(%{role: %{id: role_id}}, %{role: role}),
+    do: if(role_id !== downcase(role), do: default_resp(true), else: default_resp(false))
 
   defp check_role(%{role: nil}, _), do: error()
 
   defp update_role(%{role: %{id: role_id} = prev_role, check: true}, %{role: role}) do
-    {:ok, %{id: new_role_id}} =
-      new_role = role |> create_role()
+    {:ok, %{id: new_role_id}} = new_role = role |> create_role()
 
     Context.update_permissions(role_id, new_role_id)
 
@@ -250,7 +260,9 @@ defmodule SecureXWeb.RoleController do
   """
   @spec delete(map()) :: tuple()
   def delete(%{id: _} = input),
-      do: delete_role_sage(input) |> default_resp(in: :delete, key: :permissions, against: :permission)
+    do:
+      delete_role_sage(input)
+      |> default_resp(in: :delete, key: :permissions, against: :permission)
 
   def delete(%{"id" => _} = input) do
     input
@@ -271,10 +283,14 @@ defmodule SecureXWeb.RoleController do
   end
 
   defp delete_permissions(%{role: %{id: role_id}}, _),
-       do: Context.delete_permissions(role_id) |> default_resp(mode: :reverse, msg: :permissions_removed_successfully)
+    do:
+      Context.delete_permissions(role_id)
+      |> default_resp(mode: :reverse, msg: :permissions_removed_successfully)
 
   defp delete_user_roles(%{role: %{id: role_id}}, _),
-       do: Context.delete_user_roles(role_id) |> default_resp(mode: :reverse, msg: :user_roles_removed_successfully)
+    do:
+      Context.delete_user_roles(role_id)
+      |> default_resp(mode: :reverse, msg: :user_roles_removed_successfully)
 
   defp delete_role(%{role: role}, _), do: Context.delete_role(role) |> default_resp
 end

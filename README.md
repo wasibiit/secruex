@@ -20,7 +20,7 @@ If installing from Hex, use the latest version from there:
 
   def deps do
     [
-      {:securex, "~> 1.0.1"}
+      {:securex, "~> 1.0.2"}
     ]
   end
   ```
@@ -54,14 +54,14 @@ You are Now Up and Running!!!
 
 You can also use SecureX as a Middleware.
 
-Valid inputs for permissions are "POST", "GET", "PUT", "DELETE", "read", "write", "delete" and "edit".
+Valid inputs for permissions are "POST", "GET", "DELETE", "PUT", "read", "write", "edit" and "delete".
 Permissions have downward flow. i.e if you have defined permissions for a higher operation,
 It automatically assigns them permissions for lower operations.
 like "edit" grants permissions for all operations. their hierarchy is in this order.
 
   ```
-    "read" < "write" < "delete" < "edit"
-    "GET" < "POST" < "DELETE" < "PUT"
+    "read" < "write" < "edit" < "delete"
+    "GET" < "POST" < "PUT" < "DELETE"
     1 < 2 < 3 < 4
   ```
 

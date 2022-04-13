@@ -18,7 +18,7 @@ defmodule SecureX do
 
    def deps do
     [
-      {:securex, "~> 1.0.1"}
+      {:securex, "~> 1.0.2"}
     ]
   end
   ```
@@ -37,9 +37,9 @@ defmodule SecureX do
   iex> mix securex.gen.migration
   * creating priv/repo/migrations
   * creating priv/repo/migrations/20211112222439_create_table_roles.exs
-  * creating priv/repo/migrations/20211112222439_create_table_resources.exs
-  * creating priv/repo/migrations/20211112222439_create_table_permissions.exs
-  * creating priv/repo/migrations/20211112222439_create_table_user_roles.exs
+  * creating priv/repo/migrations/20211112222440_create_table_resources.exs
+  * creating priv/repo/migrations/20211112222441_create_table_permissions.exs
+  * creating priv/repo/migrations/202111122224_create_table_user_roles.exs
   ```
   The Migrations added to your project.
   ```elixir
@@ -52,7 +52,7 @@ defmodule SecureX do
 
   You can also use SecureX as a Middleware.
 
-  Valid inputs for permissions are "POST", "GET" ,"PUT" ,"DELETE" ,"read" ,"write" ,"delete" and "edit".
+  Valid inputs for permissions are "POST", "GET", "DELETE", "PUT", "read", "write", "edit" and "delete".
   Permissions have downward flow. i.e if you have defined permissions for a higher operation,
   It automatically assigns them permissions for lower operations.
   like "edit" grants permissions for all operations. Their hierarchy is in this order.

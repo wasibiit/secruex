@@ -110,7 +110,7 @@ defmodule SecureX.Context do
   @spec preload_permissions(struct()) :: struct()
   def preload_permissions(data), do: repo().preload(data, [:role, :resource])
 
-  def list_permissions(roles) do
+  def list_permissions(roles, page, page_size \\ 10) do
     from(p in Permission,
       where: p.role_id in ^roles,
       select: %{
@@ -119,7 +119,7 @@ defmodule SecureX.Context do
         role_id: p.role_id
       }
     )
-    |> repo().all
+    |> repo().paginate(page: page, page_size: page_size)
   end
 
   #  def list_permissions_by(role_ids) do

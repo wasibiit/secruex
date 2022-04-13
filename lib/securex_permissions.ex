@@ -16,13 +16,9 @@ defmodule SecureX.Permissions do
       %{ permission: 4, resource_id: "person_form", role_id: "super_admin"}
      ]
   """
-  @spec list(list()) :: tuple()
-  def list(params) do
-    case PermissionController.list_permissions(params) do
-      [] -> {:error, :no_permissions_found}
-      per -> {:ok, per}
-    end
-  end
+  @spec list(list(), number(), number()) :: tuple()
+  def list(params, page, page_size \\ 10), do:
+    PermissionController.list_permissions(params, page, page_size)
 
   @doc """
   Add a Permission. You can send either `Atom Map` or `String Map` to add a Permission.

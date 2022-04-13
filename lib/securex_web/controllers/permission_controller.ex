@@ -9,7 +9,7 @@ defmodule SecureXWeb.PermissionController do
 
   ## Examples
 
-      iex> list_permissions(["owner", "super_admin"])
+      iex> list_permissions(["owner", "super_admin"], 0)
       [
       ...
       %{ permission: 4, resource_id: "users", role_id: "admin"},
@@ -18,9 +18,9 @@ defmodule SecureXWeb.PermissionController do
       ...
     ]
   """
-  @spec list_permissions(list()) :: nonempty_list()
-  def list_permissions(params) when params !== [] do
-    Context.list_permissions(params)
+  @spec list_permissions(list(), number(), number()) :: tuple()
+  def list_permissions(params, page, page_size \\ 10) when params !== [] do
+    Context.list_permissions(params, page, page_size) |> default_resp
   end
 
   def list_permissions(_), do: {:error, :bad_input}
