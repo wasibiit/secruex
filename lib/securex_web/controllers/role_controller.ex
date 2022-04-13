@@ -240,13 +240,13 @@ defmodule SecureXWeb.RoleController do
 
   ## Examples
 
-      iex> delete(%{"id" => "admin")
-      %Role{
+      iex> delete(%{"id" => "admin"})
+      {:ok, %Role{
         id: "admin",
         name: "Admin",
         permissions: :successfully_removed_permissions,
         user_roles: :successfully_removed_user_roles
-      }
+      }}
   """
   @spec delete(map()) :: tuple()
   def delete(%{id: _} = input),
