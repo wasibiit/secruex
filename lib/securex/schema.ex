@@ -37,7 +37,6 @@ defmodule SecureX.Schema do
 
   defmacro timestamp() do
     quote do
-      field(:deleted_at, :utc_datetime)
       timestamps()
     end
   end
