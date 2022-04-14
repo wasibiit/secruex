@@ -89,11 +89,11 @@ defmodule SecureXWeb.RoleController do
     |> transaction(SecureX.Repo.repo(), input)
   end
 
-  defp get_role(_, params) do
-    role = params |> Map.get(:id) || params |> Map.get(:role) || params |> Map.get(:id)
-    role = role |> trimmed_downcase |> Context.get_role_by()
-    if role, do: role |> default_resp(), else: role |> default_resp(mode: :reverse)
-  end
+  defp get_role(_, %{id: role}),
+    do: role |> trimmed_downcase |> Context.get_role_by() |> default_resp()
+
+  defp get_role(_, %{role: role}),
+    do: role |> trimmed_downcase |> Context.get_role_by() |> default_resp(mode: :reverse)
 
   defp create_role(_, %{role: role}), do: role |> create_role() |> default_resp()
 
@@ -102,6 +102,9 @@ defmodule SecureXWeb.RoleController do
     role = role |> trimmed_downcase()
 
     Context.create(Role, %{id: role, name: camelize(name)})
+
+  rescue
+    _ -> error(:role_already_exist)
   end
 
   defp get_resources(_, _), do: Context.list_resources() |> default_resp()
