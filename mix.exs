@@ -4,13 +4,12 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "1.0.2",
+      version: "1.0.3",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       description:
         "SecureX is Role Based Access Control(RBAC) and Access Control List (ACL) to handle User Roles And Permissions.",
       links: %{"GitHub" => "https://github.com/wasitanbits/secruex"},
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
@@ -48,21 +47,19 @@ defmodule SecureX.MixProject do
   def application do
     [
       mod: {SecureX.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
     ]
   end
 
   defp deps do
     [
       [
-
         {:phoenix, "~> 1.6"},
         {:ecto_sql, "~> 3.7"},
         {:sage, "~> 0.6.1"},
-        {:scrivener, "~> 2.7"}
+        {:scrivener_ecto, "~> 2.7"}
       ],
       [
-        {:gettext, "~> 0.19.1", only: :dev, runtime: false},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
         {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false}
       ]
