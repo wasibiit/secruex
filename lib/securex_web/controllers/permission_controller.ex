@@ -18,7 +18,7 @@ defmodule SecureXWeb.PermissionController do
       ...
     ]
   """
-  @spec list_permissions(list(), number(), number()) :: tuple()
+  @spec list_permissions(list(), number(), number()) :: tuple() | struct()
   def list_permissions(list, page \\ nil, page_size \\ 10)
 
   def list_permissions(list, page, page_size) when list !== [],

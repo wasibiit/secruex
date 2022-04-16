@@ -78,6 +78,7 @@ defmodule SecureX.Helper do
   """
   def default_resp({:ok, _, result}, in: in_, keys: keys) when is_map(result) do
     in_ = result[in_]
+
     case is_map(in_) do
       true ->
         Enum.reduce(keys, in_, fn {key, value}, acc ->

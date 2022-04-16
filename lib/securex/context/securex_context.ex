@@ -25,14 +25,18 @@ defmodule SecureX.Context do
     |> repo().all
   end
 
-  def list_roles_by() do
-    from(r in Role,
-      left_join: p in Permission,
-      on: p.role_id == r.id,
-      order_by: [asc: r.id],
-      preload: [{:permissions, p}]
-    )
-    |> repo().all
+  def list_roles_by(page \\ nil, page_size \\ 10) do
+    query =
+      from(r in Role,
+        left_join: p in Permission,
+        on: p.role_id == r.id,
+        order_by: [asc: r.id],
+        preload: [{:permissions, p}]
+      )
+
+    if page,
+      do: query |> repo().paginate(page: page, page_size: page_size),
+      else: query |> repo().all
   end
 
   def get_role(role_id) do
@@ -71,8 +75,12 @@ defmodule SecureX.Context do
   @spec preload_resources(struct()) :: struct()
   def preload_resources(data), do: repo().preload(data, [])
 
-  def list_resources do
-    repo().all(from(r in Resource, order_by: [asc: r.name]))
+  def list_resources(page \\ nil, page_size \\ 10) do
+    query = from(r in Resource, order_by: [asc: r.name])
+
+    if page,
+      do: query |> repo().paginate(page: page, page_size: page_size),
+      else: query |> repo().all
   end
 
   def get_resource(res) do
