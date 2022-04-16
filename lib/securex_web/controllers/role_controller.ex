@@ -68,14 +68,14 @@ defmodule SecureXWeb.RoleController do
   @spec create(map()) :: tuple()
   def create(%{role: _} = input) do
     create_role_sage(input)
-    |> default_resp(in: :create, key: :permissions, against: :permission)
+    |> default_resp(in: :delete, keys: [permissions: :permission])
   end
 
   def create(%{"role" => _} = input) do
     input
     |> keys_to_atoms
     |> create_role_sage()
-    |> default_resp(in: :create, key: :permissions, against: :permission)
+    |> default_resp(in: :create, keys: [permissions: :permission])
   end
 
   def create(_), do: {:error, :bad_input}
@@ -175,13 +175,13 @@ defmodule SecureXWeb.RoleController do
   def update(%{id: _, role: _} = input),
     do:
       update_role_sage(input)
-      |> default_resp(in: :update, key: :permissions, against: :permission)
+      |> default_resp(in: :update, keys: [permissions: :permission])
 
   def update(%{"id" => _, "role" => _} = input) do
     input
     |> keys_to_atoms
     |> update_role_sage()
-    |> default_resp(in: :update, key: :permissions, against: :permission)
+    |> default_resp(in: :delete, keys: [permissions: :permission])
   end
 
   def update(_), do: {:error, :bad_input}
@@ -264,13 +264,13 @@ defmodule SecureXWeb.RoleController do
   def delete(%{id: _} = input),
     do:
       delete_role_sage(input)
-      |> default_resp(in: :delete, key: :permissions, against: :permission)
+      |> default_resp(in: :delete, keys: [permissions: :permission])
 
   def delete(%{"id" => _} = input) do
     input
     |> keys_to_atoms
     |> delete_role_sage()
-    |> default_resp(in: :delete, key: :permissions, against: :permission)
+    |> default_resp(in: :delete, keys: [permissions: :permission])
   end
 
   def delete(_), do: {:error, :bad_input}

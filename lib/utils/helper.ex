@@ -35,6 +35,22 @@ defmodule SecureX.Helper do
   @spec default_resp(any(), Keyword.t()) :: tuple()
   def default_resp(result, opts \\ [])
 
+  @doc """
+    sends response for the Ecto.all, and list responses.
+    In mode: :reverse we are doing to inverse of response like '[]'  will indicate success and '[struct]' will indicate error.
+
+  ##Examples
+
+    `some_query |> repo.all`
+       this will return `[]` or `[structs]`  so we can handle that response as
+
+      'if '[]' or '[structs]', do:some_query |> repo.all |> default_resp()'
+      'if '[]', do: some_query |> repo.all |> default_resp(msg: error_msg)'
+      'if '[]', do: some_query |> repo.all |> default_resp(mode: :reverse,msg: success_msg)'
+      'if '[structs]', do: some_query |> repo.all |> default_resp(mode: :reverse,msg: error_msg)'
+
+  """
+
   def default_resp([], mode: :reverse, msg: msg), do: ok(msg)
 
   def default_resp([], msg: err), do: err |> error()
@@ -45,15 +61,69 @@ defmodule SecureX.Helper do
 
   def default_resp(result, _) when is_list(result), do: ok(result)
 
-  def default_resp({:ok, _, result}, in: in_, key: key, against: against) when is_map(result) do
-    in_ = result |> Map.get(in_)
-    key = result |> Map.get(key)
-    Map.put(in_, against, key) |> ok()
+  @doc """
+    merges transactions of a sage.
+
+  ##Examples
+
+    'defp create_employee_sage(input) do
+    new()
+    |> run(:employee, &create_employee/2, &abort/3)
+    |> run(:salary, &create_salary/2, &abort/3)
+    |> transaction(MyApp.Repo, input)
+  end'
+      and we like to merge two transactions like employee data and its salary as
+     '{:ok, _, result} |> default_resp(in: salary, [employee: employee])'
+
+  """
+  def default_resp({:ok, _, result}, in: in_, keys: keys) when is_map(result) do
+    in_ = result[in_]
+    case is_map(in_) do
+      true ->
+        Enum.reduce(keys, in_, fn {key, value}, acc ->
+          Map.put(acc, value, result[key])
+        end)
+        |> ok()
+
+      false ->
+        result[in_]
+    end
   end
+
+  @doc """
+    gets data from transactions of a sage.
+
+  ##Examples
+
+    'defp create_employee_sage(input) do
+    new()
+    |> run(:employee, &create_employee/2, &abort/3)
+    |> run(:salary, &create_salary/2, &abort/3)
+    |> transaction(MyApp.Repo, input)
+  end'
+      and we can to get employee as
+     '{:ok, _, result} |> default_resp(key: employee)'
+
+  """
 
   def default_resp({:ok, _, result}, key: key) when is_map(result),
     do: result |> Map.get(key) |> ok()
 
+  @doc """
+    sends response for the Ecto.insert_all,Ecto.insert_all and Ecto.insert_all.
+    In mode: :reverse we are doing to inverse of response like '{integer,nil}'  will indicate success and '{integer,[structs]}' will indicate error.
+
+  ##Examples
+
+    `some_query |> repo.insert_all`
+       this will return `{integer,nil}` or `{integer,[structs]}`  so we can handle that response as
+
+      'if '{integer,nil} or {integer,[structs]}', do:some_query |> repo.insert_all |> default_resp()'
+      'if '{integer,nil}', do: some_query |> repo.insert_all |> default_resp(msg: error_msg)'
+      'if '{integer,nil}', do: some_query |> repo.insert_all |> default_resp(mode: :reverse,msg: success_msg)'
+      'if '{integer,[structs]}', do: some_query |> repo.insert_all |> default_resp(mode: :reverse,msg: error_msg)'
+
+  """
   def default_resp({_, nil}, mode: :reverse, msg: msg), do: ok(msg)
 
   def default_resp({_, nil}, msg: err), do: err |> error()
@@ -64,8 +134,45 @@ defmodule SecureX.Helper do
 
   def default_resp({_, result}, _) when is_list(result), do: ok(result)
 
+  @doc """
+    sends response for the changeset errors in functions  Ecto.insert , Ecto.update,Ecto.delete.
+  ##Examples
+
+    `some_query |> repo.insert`
+       this will return `{:ok,struct}` or `{:error,changeset}`  so we can handle that response as
+
+      'if '{:error,changeset}', do: some_query |> repo.insert |> default_resp()'
+  """
+
   def default_resp({:error, changeset}, _), do: changeset_error(changeset)
 
+  @doc """
+    sends response for the Ecto.get, Ecto.get_by,Ecto.one and functions that will return nil or struct.
+    Also works for Ecto.insert ,Ecto.update and Ecto.delete.
+    In mode: :reverse we are doing to inverse of response like 'nil'  will indicate success and 'struct' will indicate error.
+
+  ##Examples
+
+    `some_query |> repo.get`
+       this will return `nil` or `struct`  so we can handle that response as
+
+      'if 'nil or struct', do:some_query |> repo.get |> default_resp()'
+      'if 'nil or struct', do: some_query |> repo.insert_all |> default_resp(mode: :reverse)'
+
+    `some_query |> repo.create`
+       this will return `{:ok,struct}` or ;{:error,changeset}'  so we can handle that response as
+
+      'some_query |> repo.insert |> default_resp()'
+      'some_query |> repo.update |> default_resp()'
+      'some_query |> repo.delete |> default_resp()'
+
+     default_resp returns tuple as
+
+       'result |> default_resp()' Returns {:ok,result}
+       'default_resp(mode: :reverse,msg: error)' Returns {:error,error}
+       'params |> default_resp()' Returns {:ok, params}
+
+  """
   def default_resp(result, _) when is_tuple(result), do: result
 
   def default_resp(result, mode: :reverse) when is_nil(result), do: ok(result)
@@ -86,11 +193,23 @@ defmodule SecureX.Helper do
 
   def changeset_error(err), do: err |> error
 
+  @doc """
+    sends ok tuple.
+
+  ##Examples
+      'result |> ok()' Returns {:ok, result}
+  """
   @spec ok(any()) :: tuple()
   def ok(data) when is_tuple(data), do: data
 
   def ok(data), do: {:ok, data}
 
+  @doc """
+    sends error tuple.
+
+  ##Examples
+      'error |> error()' Returns {:error,error}
+  """
   @spec error(any()) :: tuple()
   def error(data \\ "Doesn't Exist!")
 
