@@ -22,10 +22,9 @@ defmodule SecureXWeb.ResourceController do
       ...
     ]
   """
-  @spec list_resources() :: nonempty_list()
-  def list_resources() do
-    Context.list_resources()
-  end
+  @spec list_resources(number(), number()) :: tuple() | struct()
+  def list_resources(page \\ nil, page_size \\ 10),
+    do: Context.list_resources(page, page_size)
 
   @doc """
   Get a Resource,
@@ -43,11 +42,11 @@ defmodule SecureXWeb.ResourceController do
     case params do
       %{res: res_id} -> get_resource(res_id)
       %{"res" => res_id} -> get_resource(res_id)
-      _ -> {:error, :bad_input}
+      _ -> error(:bad_input)
     end
   end
 
-  def get(_), do: {:error, :bad_input}
+  def get(_), do: error(:bad_input)
 
   defp get_resource(params) do
     case Context.get_resource(params) do
@@ -71,11 +70,11 @@ defmodule SecureXWeb.ResourceController do
     case params do
       %{res: res} -> create_res_checks(res)
       %{"res" => res} -> create_res_checks(res)
-      _ -> {:error, :bad_input}
+      _ -> error(:bad_input)
     end
   end
 
-  def create(_), do: {:error, :bad_input}
+  def create(_), do: error(:bad_input)
 
   defp create_res_checks(res) do
     with nil <- Context.get_resource_by(res),

@@ -9,27 +9,21 @@ defmodule SecureXWeb.UserRoleController do
 
   ## Examples
 
+      iex> get(%{"user_id" => 0})
+      {:error, :no_user_roles_found}
+
       iex> get(%{"user_id" => 1})
-      ["owner", "admin", ...]
+      {:ok, ["owner", "admin", ...]}
 
   """
   @spec get(map()) :: tuple()
-  def get(params) when params !== %{} do
-    case params do
-      %{user_id: user_id} -> get_user_role(user_id)
-      %{"user_id" => user_id} -> get_user_role(user_id)
-      _ -> {:error, :bad_input}
-    end
-  end
+  def get(%{user_id: user_id}),
+    do: Context.get_user_roles_by_user_id(user_id) |> default_resp(msg: :no_user_roles_found)
 
-  def get(_), do: {:error, :bad_input}
+  def get(%{"user_id" => user_id}),
+    do: Context.get_user_roles_by_user_id(user_id) |> default_resp(msg: :no_user_roles_found)
 
-  defp get_user_role(params) do
-    case Context.get_user_roles_by_user_id(params) do
-      nil -> {:error, :no_user_roles_found}
-      roles -> {:ok, roles}
-    end
-  end
+  def get(_), do: error(:bad_input)
 
   @doc """
   Create an UserRole,

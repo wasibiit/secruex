@@ -23,8 +23,9 @@ defmodule SecureX.Roles do
       }
      ]
   """
-  @spec list() :: tuple()
-  def list(), do: RoleController.list_roles()
+  @spec list(number(), number()) :: tuple()
+  def list(page \\ nil, page_size \\ 10),
+    do: RoleController.list_roles(page, page_size)
 
   @doc """
   Get a Role.

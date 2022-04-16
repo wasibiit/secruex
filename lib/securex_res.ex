@@ -7,28 +7,48 @@ defmodule SecureX.Res do
 
   @doc """
   Get list of Resources.
+  `list/1` get records without pagination
+  `list/2` & `list/3` returns records with pagination
 
   ## Examples
 
-      iex> list()
-      [
-      %Resource{
-        id: "person_farm",
-        name: "Persons Farm"
-      },
-      %Resource{
-        id: "users",
-        name: "Users"
+      iex> list(1, 2)
+      {:ok,
+        %Scrivener.Page{
+          entries: [
+            %Resource{
+              id: "person_farm",
+              name: "Persons Farm"
+            },
+            %Resource{
+              id: "users",
+              name: "Users"
+            },
+          ],
+        page_number: 1,
+        page_size: 2,
+        total_entries: 22,
+        total_pages: 3
       }
-      ]
+    }
+
+      iex> list()
+      {:ok,
+        [
+          %Resource{
+            id: "person_farm",
+            name: "Persons Farm"
+          },
+          %Resource{
+            id: "users",
+            name: "Users"
+          }
+        ]
+      }
   """
-  @spec list() :: tuple()
-  def list() do
-    case ResourceController.list_resources() do
-      [] -> {:error, :no_resources_found}
-      res -> {:ok, res}
-    end
-  end
+  @spec list(number(), number()) :: tuple()
+  def list(page \\ nil, page_size \\ 10),
+    do: ResourceController.list_resources(page, page_size)
 
   @doc """
   Get a Resource.

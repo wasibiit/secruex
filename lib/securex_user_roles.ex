@@ -10,25 +10,25 @@ defmodule SecureX.UserRoles do
 
   ## Examples
 
+      iex> get(%{"user_id" => 0})
+      {:error, :no_user_roles_found}
+
       iex> get(%{"user_id" => 1})
-      [
-        %UserRole{
-          role_id: "admin",
-          user_id: 1
-        },
-        %UserRole{
-          role_id: "super_admin",
-          user_id: 1
-        }
-      ]
+      {:ok,
+          [
+            %UserRole{
+              role_id: "admin",
+              user_id: 1
+            },
+            %UserRole{
+              role_id: "super_admin",
+              user_id: 1
+            }
+          ]
+      }
   """
   @spec get(map()) :: tuple()
-  def get(params) do
-    case UserRoleController.get(params) do
-      {:error, error} -> {:error, error}
-      {:ok, user_roles} -> {:ok, user_roles}
-    end
-  end
+  def get(params), do: UserRoleController.get(params)
 
   @doc """
   Add an UserRole. You can send either `Atom Map` or `String Map` to add an UserRole.

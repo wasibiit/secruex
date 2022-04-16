@@ -24,8 +24,9 @@ defmodule SecureXWeb.RoleController do
       }
     ]
   """
-  @spec list_roles() :: tuple()
-  def list_roles(), do: Context.list_roles_by() |> default_resp(msg: :no_roles_found)
+  @spec list_roles(number(), number()) :: tuple()
+  def list_roles(page \\ nil, page_size \\ 10),
+    do: Context.list_roles_by(page, page_size)
 
   @doc """
   Get a Role,
@@ -51,7 +52,7 @@ defmodule SecureXWeb.RoleController do
 
   def get(%{"role" => role}), do: Context.get_role(role) |> default_resp
 
-  def get(_), do: {:error, :bad_input}
+  def get(_), do: error(:bad_input)
 
   @doc """
   Create a Role,
@@ -78,7 +79,7 @@ defmodule SecureXWeb.RoleController do
     |> default_resp(in: :create, key: :permissions, against: :permission)
   end
 
-  def create(_), do: {:error, :bad_input}
+  def create(_), do: error(:bad_input)
 
   defp create_role_sage(input) do
     new()
@@ -123,7 +124,7 @@ defmodule SecureXWeb.RoleController do
         |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
-        {:ok, :permissions_already_set}
+        ok(:permissions_already_set)
     end)
   end
 
@@ -147,7 +148,7 @@ defmodule SecureXWeb.RoleController do
         |> default_resp(mode: :reverse, msg: :permissions_added_successfully)
 
       _ ->
-        {:ok, :permissions_already_set}
+        ok(:permissions_already_set)
     end)
   end
 
@@ -184,7 +185,7 @@ defmodule SecureXWeb.RoleController do
     |> default_resp(in: :update, key: :permissions, against: :permission)
   end
 
-  def update(_), do: {:error, :bad_input}
+  def update(_), do: error(:bad_input)
 
   defp update_role_sage(input) do
     new()
@@ -273,7 +274,7 @@ defmodule SecureXWeb.RoleController do
     |> default_resp(in: :delete, key: :permissions, against: :permission)
   end
 
-  def delete(_), do: {:error, :bad_input}
+  def delete(_), do: error(:bad_input)
 
   defp delete_role_sage(input) do
     new()
