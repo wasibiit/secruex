@@ -19,11 +19,12 @@ defmodule SecureXWeb.PermissionController do
     ]
   """
   @spec list_permissions(list(), number(), number()) :: tuple()
-  def list_permissions(params, page, page_size \\ 10) when params !== [] do
-    Context.list_permissions(params, page, page_size) |> default_resp
-  end
+  def list_permissions(list, page \\ nil, page_size \\ 10)
 
-  def list_permissions(_), do: {:error, :bad_input}
+  def list_permissions(list, page, page_size) when list !== [],
+    do: Context.list_permissions(list, page, page_size) |> default_resp
+
+  def list_permissions(_, _, _), do: {:error, :bad_input}
 
   @doc """
   Create a Permission,

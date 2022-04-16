@@ -49,15 +49,26 @@ The Migrations added to your project.
   iex> mix ecto.migrate
   ```
 You are Now Up and Running!!!
+## Pagination with Scrivener
 
-## Guide
+  SecureX Supports pagination with `Scrivener` & `ScrivenerEcto`,
+  Please read the following documentations if you have :
+    -> https://hexdocs.pm/scrivener_ecto/readme.html
+    -> https://hexdocs.pm/scrivener/readme.html
 
-You can also use SecureX as a Middleware.
+  Please add to your project Repo,
+  ```
+    use Scrivener, page_size: 10
+  ```
 
-Valid inputs for permissions are "POST", "GET", "DELETE", "PUT", "read", "write", "edit" and "delete".
-Permissions have downward flow. i.e if you have defined permissions for a higher operation,
-It automatically assigns them permissions for lower operations.
-like "edit" grants permissions for all operations. their hierarchy is in this order.
+  ## Guide
+
+  You can also use SecureX as a Middleware.
+
+  Valid inputs for permissions are "POST", "GET", "PUT", "DELETE", "read", "write", "edit" and "delete".
+  Permissions have downward flow. i.e if you have defined permissions for a higher operation,
+  It automatically assigns them permissions for lower operations.
+  like "edit" grants permissions for all operations. Their hierarchy is in this order.
 
   ```
     "read" < "write" < "edit" < "delete"

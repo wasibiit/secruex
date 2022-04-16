@@ -6,6 +6,5 @@ defmodule SecureX.Repo do
   def repo do
     :securex
     |> Application.fetch_env!(:repo)
-
   end
 end

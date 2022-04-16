@@ -102,7 +102,6 @@ defmodule SecureXWeb.RoleController do
     role = role |> trimmed_downcase()
 
     Context.create(Role, %{id: role, name: camelize(name)})
-
   rescue
     _ -> error(:role_already_exist)
   end

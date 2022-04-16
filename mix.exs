@@ -4,7 +4,7 @@ defmodule SecureX.MixProject do
   def project do
     [
       app: :securex,
-      version: "1.0.4",
+      version: "1.0.5",
       maintainers: ["Wasi Ur Rahman"],
       licenses: ["Apache 2.0"],
       description:
@@ -47,7 +47,7 @@ defmodule SecureX.MixProject do
   def application do
     [
       mod: {SecureX.Application, []},
-      extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -56,8 +56,7 @@ defmodule SecureX.MixProject do
       [
         {:phoenix, "~> 1.6"},
         {:ecto_sql, "~> 3.7"},
-        {:sage, "~> 0.6.1"},
-        {:scrivener_ecto, "~> 2.7"}
+        {:sage, "~> 0.6.1"}
       ],
       [
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},

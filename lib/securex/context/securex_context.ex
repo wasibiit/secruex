@@ -111,15 +111,19 @@ defmodule SecureX.Context do
   def preload_permissions(data), do: repo().preload(data, [:role, :resource])
 
   def list_permissions(roles, page, page_size \\ 10) do
-    from(p in Permission,
-      where: p.role_id in ^roles,
-      select: %{
-        permission: p.permission,
-        resource_id: p.resource_id,
-        role_id: p.role_id
-      }
-    )
-    |> repo().paginate(page: page, page_size: page_size)
+    query =
+      from(p in Permission,
+        where: p.role_id in ^roles,
+        select: %{
+          permission: p.permission,
+          resource_id: p.resource_id,
+          role_id: p.role_id
+        }
+      )
+
+    if page,
+      do: query |> repo().paginate(page: page, page_size: page_size),
+      else: query |> repo().all
   end
 
   #  def list_permissions_by(role_ids) do

@@ -18,7 +18,7 @@ defmodule SecureX do
 
    def deps do
     [
-      {:securex, "~> 1.0.4"}
+      {:securex, "~> 1.0.5"}
     ]
   end
   ```
@@ -48,18 +48,30 @@ defmodule SecureX do
   ```
   You are Now Up and Running!!!
 
+  ## Pagination with Scrivener
+
+  SecureX Supports pagination with `Scrivener` & `ScrivenerEcto`,
+  Please read the following documentations if you have :
+    -> https://hexdocs.pm/scrivener_ecto/readme.html
+    -> https://hexdocs.pm/scrivener/readme.html
+
+  Please add to your project Repo,
+  ```
+    use Scrivener, page_size: 10
+  ```
+
   ## Guide
 
   You can also use SecureX as a Middleware.
 
-  Valid inputs for permissions are "POST", "GET", "DELETE", "PUT", "read", "write", "edit" and "delete".
+  Valid inputs for permissions are "POST", "GET", "PUT", "DELETE", "read", "write", "edit" and "delete".
   Permissions have downward flow. i.e if you have defined permissions for a higher operation,
   It automatically assigns them permissions for lower operations.
   like "edit" grants permissions for all operations. Their hierarchy is in this order.
 
   ```
-    "read" < "write" < "delete" < "edit"
-    "GET" < "POST" < "DELETE" < "PUT"
+    "read" < "write" < "edit" < "delete"
+    "GET" < "POST" < "PUT" < "DELETE"
     1 < 2 < 3 < 4
   ```
 

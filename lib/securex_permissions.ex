@@ -7,18 +7,48 @@ defmodule SecureX.Permissions do
 
   @doc """
   Get list of Permissions by User Roles.
+    List/1 is without pagination,
+    List/2 & List/3 is with pagination.
 
   ## Examples
 
-      iex> list(["owner", "super_admin"])
+      iex> list([], 1)
+      {:error, :bad_input}
+
+      iex> list([])
+      {:error, :bad_input}
+
+      iex> list(["owner", "super_admin"], 1)
+      {:ok,
+        %Scrivener.Page{
+          entries: [
+            %{permission: 4, resource_id: "roles", role_id: "owner"},
+            %{permission: 4, resource_id: "users", role_id: "owner"},
+            %{permission: 4, resource_id: "stock_types", role_id: "owner"},
+            %{permission: 4, resource_id: "sales", role_id: "owner"},
+            %{permission: 4, resource_id: "stocks", role_id: "owner"},
+            %{permission: 4, resource_id: "providers", role_id: "owner"},
+            %{permission: 4, resource_id: "fuel_dispensers", role_id: "owner"},
+            %{permission: 4, resource_id: "employees", role_id: "owner"},
+            %{permission: 4, resource_id: "customers", role_id: "owner"},
+            %{permission: 4, resource_id: "stock_stats", role_id: "owner"}
+          ],
+        page_number: 1,
+        page_size: 10,
+        total_entries: 22,
+        total_pages: 3
+      }
+    }
+
+    iex> list(["owner", "super_admin"])
       [
       %{ permission: 4, resource_id: "users", role_id: "admin"},
       %{ permission: 4, resource_id: "person_form", role_id: "super_admin"}
      ]
   """
   @spec list(list(), number(), number()) :: tuple()
-  def list(params, page, page_size \\ 10), do:
-    PermissionController.list_permissions(params, page, page_size)
+  def list(list, page \\ nil, page_size \\ 10),
+    do: PermissionController.list_permissions(list, page, page_size)
 
   @doc """
   Add a Permission. You can send either `Atom Map` or `String Map` to add a Permission.
