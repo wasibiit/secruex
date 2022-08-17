@@ -72,8 +72,14 @@ if Code.ensure_loaded?(Ecto) do
               end
             end
         <% :permission ->  %>
+            <% primary_id_type = Application.get_env(:securex, :type) == :binary_id  %>
+        
             def change do
-              create table(:permissions) do
+              create table(:permissions, primary_key: <%= !primary_id_type %>) do
+                <%= if primary_id_type do %>
+                  add :id, :string, primary_key: true
+                <% end %>
+                
                 add :permission, :integer
                 add :role_id, references(:roles, on_delete: :nothing, type: :string)
                 add :resource_id, references(:resources, on_delete: :nothing, type: :string)
@@ -83,8 +89,14 @@ if Code.ensure_loaded?(Ecto) do
               create unique_index(:permissions, [:role_id, :resource_id])
             end
         <% :user_roles ->  %>
+            <% primary_id_type = Application.get_env(:securex, :type) == :binary_id  %>
+            
             def change do
-              create table(:user_roles) do
+              create table(:user_roles, primary_key: <%= !primary_id_type %>) do
+               <%= if primary_id_type do %>
+                  add :id, :string, primary_key: true
+                <% end %>
+                
                 add :role_id, references(:roles, on_delete: :nothing, type: :string)
                 add :user_id, references(:users, on_delete: :nothing)
 
