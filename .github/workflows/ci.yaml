@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        otp-version: [25.0]
+        elixir-version: [1.13.4]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: erlef/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir-version }}
+          otp-version: ${{ matrix.otp-version }}
+
+      - uses: actions/cache@v2
+        id: deps-cache
+        with:
+          path: deps
+          key: ${{ runner.os }}-deps-${{ hashFiles(format('{0}/mix.lock', github.workspace)) }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+      - uses: actions/cache@v2
+        id: build-cache
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ matrix.otp-version }}-${{ matrix.elixir-version }}-${{ hashFiles(format('{0}/mix.lock', github.workspace)) }}
+
+      - name: Install Elixir dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: |
+          env
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+
+      - name: Compile app
+        run: mix compile
+
+      - name: Check elixir formatting
+        run: mix format --check-formatted
+
+      - name: Check unused-dependencies
+        run: mix deps.unlock --check-unused
+
+      - name: Security Audit dependencies
+        run: mix deps.audit
+
+      - name: Security Audit code - Sobelow
+        run: mix sobelow --config
+
+      - name: Lint elixir code - Credo
+        run: mix credo
