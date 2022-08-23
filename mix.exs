@@ -59,6 +59,8 @@ defmodule SecureX.MixProject do
         {:sage, "~> 0.6.1"}
       ],
       [
+        {:sobelow, "~> 0.11", only: [:dev, :test], runtime: true},
+        {:mix_audit, "~> 1.0", only: [:dev, :test], runtime: false},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
         {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false}
       ]

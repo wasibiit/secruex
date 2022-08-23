@@ -26,7 +26,7 @@ erl_crash.dump
 
 # Ignore package tarball (built via "mix hex.build").
 securex-*.tar
-
+/.vscode
 
 # Temporary files for e.g. tests
 /tmp
