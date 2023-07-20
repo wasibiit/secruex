@@ -121,7 +121,7 @@ In RestApi or GraphiQL all you have to do, add a `Plug`.
   end
   ```
 You are all set. 
-Please let us know about and open issue on https://github.com/DevWasi/secruex/issues
+Please let us know about and open issue on https://github.com/wasibiit/secruex/issues
 Looking Forward to it. 
 
 Happy Coding !!!!!
